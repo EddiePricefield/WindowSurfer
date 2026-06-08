@@ -14,5 +14,5 @@
      NOOOPNOP                        KLMNOP     QS       NOOVRRRS    QNOOOP
      QRRRSQRS                     KLMNOPQRS              NOOOOP       QRRRS
                                   NOPQRS                 QRRRRS     
-  A    0  0     aaaaaaaa        b QRS                                                          b
+  A    0  0     aaaaaaaa      b c QRS                                                          b
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA                                  

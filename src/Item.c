@@ -13,6 +13,7 @@
 #include "Item.h"
 #include "ItemBit.h"
 #include "ItemByte.h"
+#include "ItemAtalho.h"
 #include "Tipos.h"
 
 /**
@@ -59,6 +60,9 @@ void atualizarItem( Item *item, float delta ) {
         case TIPO_ITEM_BYTE:
             atualizarItemByte( (ItemByte*) item->objeto, delta );
             break;
+        case TIPO_ITEM_ATALHO:
+            atualizarItemAtalho( (ItemAtalho*) item->objeto, delta );
+            break;
         default:
             return;
     }
@@ -76,6 +80,9 @@ void desenharItem( Item *item ) {
             break;
         case TIPO_ITEM_BYTE:
             desenharItemByte( (ItemByte*) item->objeto );
+            break;
+        case TIPO_ITEM_ATALHO:
+            desenharItemAtalho( (ItemAtalho*) item->objeto );
             break;
         default:
             return;

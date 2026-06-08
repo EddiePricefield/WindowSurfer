@@ -63,11 +63,21 @@ typedef enum EstadoItemByte {
 } EstadoItemByte;
 
 /**
+ * @brief Representa o estado do item do tipo atalho.
+ */
+typedef enum EstadoItemAtalho {
+    ESTADO_ITEM_ATALHO_PARADO,
+    ESTADO_ITEM_ATALHO_COLETADO,
+} EstadoItemAtalho;
+
+
+/**
  * @brief Representa o tipo de um item.
  */
 typedef enum TipoItem {
     TIPO_ITEM_BIT,
     TIPO_ITEM_BYTE,
+    TIPO_ITEM_ATALHO,
 } TipoItem;
 
 /**
@@ -132,7 +142,7 @@ typedef struct Jogador {
     int quantidadePulos;
     int quantidadeMaxPulos;
 
-    int quantidadeAneis;
+    int quantidadeBits;
     int quantidadeVidas;
     int quantidadeHP;
     int quantidadeMaxHP;
@@ -262,6 +272,25 @@ typedef struct ItemByte {
     Animacao animacaoColetando;
 
 } ItemByte;
+
+/**
+ * @brief Representa um item do tipo atalho.
+ */
+typedef struct ItemAtalho {
+
+    Rectangle ret;
+    Color cor;
+
+    EstadoItemAtalho estado;
+    bool ativo;
+
+    Animacao *animacoes[2];
+    int quantidadeAnimacoes;
+
+    Animacao animacaoParado;
+    Animacao animacaoColetando;
+
+} ItemAtalho;
 
 /**
  * @brief Representa um item estático do mapa.

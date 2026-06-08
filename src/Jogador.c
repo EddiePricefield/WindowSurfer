@@ -18,6 +18,7 @@
 #include "Item.h"
 #include "ItemBit.h"
 #include "ItemByte.h"
+#include "ItemAtalho.h"
 #include "Macros.h"
 #include "Jogador.h"
 #include "ResourceManager.h"
@@ -64,7 +65,7 @@ Jogador *criarJogador( float x, float y, float w, float h ) {
     novoJogador->quantidadePulos = 0;
     novoJogador->quantidadeMaxPulos = 2;
 
-    novoJogador->quantidadeAneis = 0;
+    novoJogador->quantidadeBits = 0;
     novoJogador->quantidadeVidas = 3;
     novoJogador->quantidadeHP = 3;
     novoJogador->quantidadeMaxHP = 3;
@@ -610,7 +611,7 @@ static void resolverColisaoJogadorItensMapa( Jogador *j, Mapa *mapa ) {
 
             if ( CheckCollisionRecs( retColCalculado, retColItemCalculado ) ) {
                 itemBit->estado = ESTADO_ITEM_BIT_COLETADO;
-                j->quantidadeAneis++;
+                j->quantidadeBits++;
                 PlaySound( rm.somColeta );
             }
 
@@ -634,7 +635,30 @@ static void resolverColisaoJogadorItensMapa( Jogador *j, Mapa *mapa ) {
 
             if ( CheckCollisionRecs( retColCalculado, retColItemCalculado ) ) {
                 itemByte->estado = ESTADO_ITEM_BYTE_COLETADO;
-                j->quantidadeAneis += 8;
+                j->quantidadeBits += 8;
+                PlaySound( rm.somColeta );
+            }
+
+        } else if ( item->tipo == TIPO_ITEM_ATALHO ) {
+
+            ItemAtalho *itemAtalho = (ItemAtalho*) item->objeto;
+
+            if ( !itemAtalho->ativo || itemAtalho->estado == ESTADO_ITEM_ATALHO_COLETADO ) {
+                el = el->proximo;
+                continue;
+            }
+
+            QuadroAnimacao *qaItem = getQuadroAnimacaoAtualItemAtalho( itemAtalho );
+            
+            Rectangle retColItemCalculado = {
+                itemAtalho->ret.x + qaItem->retColisao.x,
+                itemAtalho->ret.y + qaItem->retColisao.y,
+                qaItem->retColisao.width,
+                qaItem->retColisao.height
+            };
+
+            if ( CheckCollisionRecs( retColCalculado, retColItemCalculado ) ) {
+                itemAtalho->estado = ESTADO_ITEM_BYTE_COLETADO;
                 PlaySound( rm.somColeta );
             }
 

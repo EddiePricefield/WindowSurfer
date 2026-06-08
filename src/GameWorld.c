@@ -102,7 +102,7 @@ void drawGameWorld( GameWorld *gw ) {
 
     desenharHud( gw );
 
-    // DrawText( TextFormat( "Anéis: %d", gw->jogador->quantidadeAneis ), 10, 10, 20, ORANGE );
+    // DrawText( TextFormat( "Anéis: %d", gw->jogador->quantidadeBits ), 10, 10, 20, ORANGE );
     // DrawText( TextFormat( "Vidas: %d", gw->jogador->quantidadeVidas ), 10, 30, 20, ORANGE );
     // DrawText( 
     //     TextFormat( 
@@ -144,7 +144,7 @@ static void desenharHud( GameWorld *gw ) {
     // desenharNumGrande( textoTempo, posicaoTempo, direita );
 
     // // Anéis //
-    // const char *textoAneis = TextFormat("%d", gw->jogador->quantidadeAneis);
+    // const char *textoAneis = TextFormat("%d", gw->jogador->quantidadeBits);
     // Vector2 posicaoAneis = { 154, 78 };
     // desenharNumGrande( textoAneis, posicaoAneis, esquerda );
 
@@ -161,7 +161,7 @@ static void desenharHud( GameWorld *gw ) {
 
     // HP //
     int hp = gw->jogador->quantidadeHP;
-    DrawTextureRec( rm.texturaHP, (Rectangle){ 2, 205 - (48 * (hp + 1) + (3 * hp)), 152, 48 }, (Vector2){ 10, 10 }, WHITE );
+    DrawTextureRec( rm.texturaHP, (Rectangle){ 2, 205 - (48 * (hp + 1) + (3 * hp)), 152, 48 }, (Vector2){ 10, 10 }, (Color){255, 255, 255, 200} );
 
 }
 
