@@ -70,6 +70,13 @@ typedef enum EstadoItemAtalho {
     ESTADO_ITEM_ATALHO_COLETADO,
 } EstadoItemAtalho;
 
+/**
+ * @brief Representa o estado do item do tipo DEFENDER.
+ */
+typedef enum EstadoItemDefender {
+    ESTADO_ITEM_DEFENDER_PARADO,
+    ESTADO_ITEM_DEFENDER_COLETADO,
+} EstadoItemDefender;
 
 /**
  * @brief Representa o tipo de um item.
@@ -78,6 +85,7 @@ typedef enum TipoItem {
     TIPO_ITEM_BIT,
     TIPO_ITEM_BYTE,
     TIPO_ITEM_ATALHO,
+    TIPO_ITEM_DEFENDER,
 } TipoItem;
 
 /**
@@ -291,6 +299,25 @@ typedef struct ItemAtalho {
     Animacao animacaoColetando;
 
 } ItemAtalho;
+
+/**
+ * @brief Representa um item do tipo defender.
+ */
+typedef struct ItemDefender {
+
+    Rectangle ret;
+    Color cor;
+
+    EstadoItemDefender estado;
+    bool ativo;
+
+    Animacao *animacoes[2];
+    int quantidadeAnimacoes;
+
+    Animacao animacaoParado;
+    Animacao animacaoColetando;
+
+} ItemDefender;
 
 /**
  * @brief Representa um item estático do mapa.

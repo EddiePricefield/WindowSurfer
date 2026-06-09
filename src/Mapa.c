@@ -19,6 +19,7 @@
 #include "ItemBit.h"
 #include "ItemByte.h"
 #include "ItemAtalho.h"
+#include "ItemDefender.h"
 #include "Obstaculo.h"
 #include "Tipos.h"
 #include "ResourceManager.h"
@@ -209,6 +210,23 @@ Mapa *carregarMapa(const char *caminhoArquivo)
                                 .y = novoMapa->dimensaoPadraoElementos * linhaAtual - 12,
                                 .width = 62,
                                 .height = 54},
+                            YELLOW);
+
+                        el->objeto = item;
+                        el->tipo = TIPO_ELEMENTO_MAPA_ITEM;
+
+                        break;
+                    
+                    case 'd':
+
+                        item = criarItem(TIPO_ITEM_DEFENDER);
+
+                        item->objeto = criarItemDefender(
+                            (Rectangle){
+                                .x = novoMapa->dimensaoPadraoElementos * colunaAtual + 8,
+                                .y = novoMapa->dimensaoPadraoElementos * linhaAtual - 12,
+                                .width = 40,
+                                .height = 46},
                             YELLOW);
 
                         el->objeto = item;

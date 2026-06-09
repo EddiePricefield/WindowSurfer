@@ -14,6 +14,7 @@
 #include "ItemBit.h"
 #include "ItemByte.h"
 #include "ItemAtalho.h"
+#include "ItemDefender.h"
 #include "Tipos.h"
 
 /**
@@ -41,6 +42,12 @@ void destruirItem( Item *item ) {
             case TIPO_ITEM_BYTE:
                 destruirItemByte( (ItemByte*) item->objeto );
                 break;
+            case TIPO_ITEM_ATALHO:
+                destruirItemAtalho( (ItemAtalho*) item->objeto );
+                break;    
+            case TIPO_ITEM_DEFENDER:
+                destruirItemDefender( (ItemDefender*) item->objeto );
+                break;
             default:
                 break;
         }
@@ -63,6 +70,9 @@ void atualizarItem( Item *item, float delta ) {
         case TIPO_ITEM_ATALHO:
             atualizarItemAtalho( (ItemAtalho*) item->objeto, delta );
             break;
+        case TIPO_ITEM_DEFENDER:
+            atualizarItemDefender( (ItemDefender*) item->objeto, delta );
+            break;
         default:
             return;
     }
@@ -82,7 +92,10 @@ void desenharItem( Item *item ) {
             desenharItemByte( (ItemByte*) item->objeto );
             break;
         case TIPO_ITEM_ATALHO:
-            desenharItemAtalho( (ItemAtalho*) item->objeto );
+            desenharItemAtalho( (ItemAtalho*) item->objeto);
+            break;
+        case TIPO_ITEM_DEFENDER:
+            desenharItemDefender( (ItemDefender*) item->objeto );
             break;
         default:
             return;

@@ -19,6 +19,7 @@
 #include "ItemBit.h"
 #include "ItemByte.h"
 #include "ItemAtalho.h"
+#include "ItemDefender.h"
 #include "Macros.h"
 #include "Jogador.h"
 #include "ResourceManager.h"
@@ -658,7 +659,33 @@ static void resolverColisaoJogadorItensMapa( Jogador *j, Mapa *mapa ) {
             };
 
             if ( CheckCollisionRecs( retColCalculado, retColItemCalculado ) ) {
-                itemAtalho->estado = ESTADO_ITEM_BYTE_COLETADO;
+                itemAtalho->estado = ESTADO_ITEM_ATALHO_COLETADO;
+                PlaySound( rm.somColeta );
+            }
+
+        } else if ( item->tipo == TIPO_ITEM_DEFENDER ) {
+
+            ItemDefender *itemDefender = (ItemDefender*) item->objeto;
+
+            if ( !itemDefender->ativo || itemDefender->estado == ESTADO_ITEM_DEFENDER_COLETADO ) {
+                el = el->proximo;
+                continue;
+            }
+
+            QuadroAnimacao *qaItem = getQuadroAnimacaoAtualItemDefender( itemDefender );
+            
+            Rectangle retColItemCalculado = {
+                itemDefender->ret.x + qaItem->retColisao.x,
+                itemDefender->ret.y + qaItem->retColisao.y,
+                qaItem->retColisao.width,
+                qaItem->retColisao.height
+            };
+
+            if ( CheckCollisionRecs( retColCalculado, retColItemCalculado ) ) {
+                itemDefender->estado = ESTADO_ITEM_DEFENDER_COLETADO;
+                if ( j->quantidadeHP < 3){
+                    j->quantidadeHP += 1;
+                }
                 PlaySound( rm.somColeta );
             }
 
