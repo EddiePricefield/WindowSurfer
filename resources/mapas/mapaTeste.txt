@@ -3,9 +3,9 @@
                     
          
          
-         
-         
-         
+        # 1    0 # 
+         KLLLLLLM
+         QRRRRRRS
                                                                       
                        KLM                                  KLLLM    
           KLM          QRS                          KM   KLLNOOOP   KLLLM
@@ -14,5 +14,5 @@
      NOOOPNOP                        KLMNOP     QS       NOOVRRRS    QNOOOP
      QRRRSQRS                     KLMNOPQRS              NOOOOP       QRRRS
                                   NOPQRS                 QRRRRS     
-  A    0  0     aaaaaaaa      b   QRS                                                          c
+  A    0  0     aaaaaaaa      b   QRS                           A    1       1      A              c
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA                                  

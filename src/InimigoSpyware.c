@@ -127,6 +127,7 @@ void atualizarInimigoSpyware( InimigoSpyware *inimigo, GameWorld *gw, float delt
             // fase X
             inimigo->ret.x += inimigo->vel.x * delta;
             resolverColisaoInimigoObstaculosMapaX( &ini, gw->mapa );
+            resolverColisaoInimigoBlocoInvisivelMapaX( &ini, gw->mapa );
 
             inimigo->vel.y += gw->gravidade * delta;
             if ( inimigo->vel.y > inimigo->velMaxQueda ) {
@@ -136,6 +137,7 @@ void atualizarInimigoSpyware( InimigoSpyware *inimigo, GameWorld *gw, float delt
             // fase Y
             inimigo->ret.y += inimigo->vel.y * delta;
             resolverColisaoInimigoObstaculosMapaY( &ini, gw->mapa );
+            resolverColisaoInimigoBlocoInvisivelMapaY( &ini, gw->mapa );
 
         } else if ( inimigo->estado == ESTADO_INIMIGO_SPYWARE_MORRENDO ) {
 

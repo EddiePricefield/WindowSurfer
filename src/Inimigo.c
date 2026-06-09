@@ -201,3 +201,122 @@ void resolverColisaoInimigoObstaculosMapaY( Inimigo *inimigo, Mapa *mapa ) {
     }
 
 }
+
+/**
+ * @brief Resolve colisões do inimigo com o bloco invisível no eixo X.
+ */
+void resolverColisaoInimigoBlocoInvisivelMapaX( Inimigo *inimigo, Mapa *mapa ) {
+
+    ElementoMapa *el = mapa->blocoInvis;
+
+    while ( el != NULL ) {
+
+        QuadroAnimacao *qa = NULL;
+
+        bool *olhandoParaDireita = NULL;
+        Rectangle *ret = NULL;
+
+        if ( inimigo->tipo == TIPO_INIMIGO_MALWARE ) {
+            InimigoMalware *malware = (InimigoMalware*) inimigo->objeto;
+            qa = getQuadroAnimacaoAtualInimigoMalware( malware );
+            olhandoParaDireita = &malware->olhandoParaDireita;
+            ret = &malware->ret;
+        } else if ( inimigo->tipo == TIPO_INIMIGO_SPYWARE ) {
+            InimigoSpyware *spyware = (InimigoSpyware*) inimigo->objeto;
+            qa = getQuadroAnimacaoAtualInimigoSpyware( spyware );
+            olhandoParaDireita = &spyware->olhandoParaDireita;
+            ret = &spyware->ret;
+        } else {
+            el = el->proximo;
+            continue;
+        }
+
+        float deslocamentoX = *olhandoParaDireita
+            ? ret->width - qa->retColisao.x - qa->retColisao.width
+            : qa->retColisao.x;
+        float deslocamentoY = qa->retColisao.y;
+
+        Rectangle retColCalculado = {
+            ret->x + deslocamentoX,
+            ret->y + deslocamentoY,
+            qa->retColisao.width,
+            qa->retColisao.height
+        };
+
+        Obstaculo *o = (Obstaculo*) el->objeto;
+
+        if ( CheckCollisionRecs( retColCalculado, o->ret ) ) {
+            if ( retColCalculado.x + retColCalculado.width / 2 < o->ret.x + o->ret.width / 2 ) {
+                ret->x = o->ret.x - qa->retColisao.width - deslocamentoX;
+                *olhandoParaDireita = !*olhandoParaDireita;
+            } else {
+                ret->x = o->ret.x + o->ret.width - deslocamentoX;
+                *olhandoParaDireita = !*olhandoParaDireita;
+            }
+        }
+
+        el = el->proximo;
+
+    }
+
+}
+
+/**
+ * @brief Resolve colisões do inimigo com o bloco invisível no eixo Y.
+ */
+void resolverColisaoInimigoBlocoInvisivelMapaY( Inimigo *inimigo, Mapa *mapa ) {
+
+    ElementoMapa *el = mapa->blocoInvis;
+
+    while ( el != NULL ) {
+
+        Obstaculo *o = (Obstaculo*) el->objeto;
+        QuadroAnimacao *qa = NULL;
+
+        bool *olhandoParaDireita = NULL;
+        Rectangle *ret = NULL;
+        Vector2 *vel = NULL;
+
+        if ( inimigo->tipo == TIPO_INIMIGO_MALWARE ) {
+            InimigoMalware *malware = (InimigoMalware*) inimigo->objeto;
+            qa = getQuadroAnimacaoAtualInimigoMalware( malware );
+            olhandoParaDireita = &malware->olhandoParaDireita;
+            ret = &malware->ret;
+            vel = &malware->vel;
+        } else if ( inimigo->tipo == TIPO_INIMIGO_SPYWARE ) {
+            InimigoSpyware *spyware = (InimigoSpyware*) inimigo->objeto;
+            qa = getQuadroAnimacaoAtualInimigoSpyware( spyware );
+            olhandoParaDireita = &spyware->olhandoParaDireita;
+            ret = &spyware->ret;
+            vel = &spyware->vel;
+        } else {
+            el = el->proximo;
+            continue;
+        }
+
+        float deslocamentoX = *olhandoParaDireita
+            ? ret->width - qa->retColisao.x - qa->retColisao.width
+            : qa->retColisao.x;
+        float deslocamentoY = qa->retColisao.y;
+
+        Rectangle retColCalculado = {
+            ret->x + deslocamentoX,
+            ret->y + deslocamentoY,
+            qa->retColisao.width,
+            qa->retColisao.height
+        };
+
+        if ( CheckCollisionRecs( retColCalculado, o->ret ) ) {
+            if ( retColCalculado.y + retColCalculado.height / 2 < o->ret.y + o->ret.height / 2 ) {
+                ret->y = o->ret.y - qa->retColisao.height - deslocamentoY;
+            } else {
+                ret->y = o->ret.y + o->ret.height - deslocamentoY;
+            }
+            vel->y = 0;
+        }
+
+        el = el->proximo;
+
+    }
+
+}

@@ -38,3 +38,13 @@ void resolverColisaoInimigoObstaculosMapaX( Inimigo *inimigo, Mapa *mapa );
  * @brief Resolve colisões do inimigo com o mapa no eixo Y.
  */
 void resolverColisaoInimigoObstaculosMapaY( Inimigo *inimigo, Mapa *mapa );
+
+/**
+ * @brief Resolve colisões do inimigo com o bloco invisivel no eixo X.
+ */
+void resolverColisaoInimigoBlocoInvisivelMapaX( Inimigo *inimigo, Mapa *mapa );
+
+/**
+ * @brief Resolve colisões do inimigo com o bloco invisivel no eixo Y.
+ */
+void resolverColisaoInimigoBlocoInvisivelMapaY( Inimigo *inimigo, Mapa *mapa );

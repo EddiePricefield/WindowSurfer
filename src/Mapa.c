@@ -21,10 +21,12 @@
 #include "ItemAtalho.h"
 #include "ItemDefender.h"
 #include "Obstaculo.h"
+#include "BlocoInvisivel.h"
 #include "Tipos.h"
 #include "ResourceManager.h"
 
 static void inserirObstaculo(Mapa *mapa, ElementoMapa *obstaculo);
+static void inserirBlocoInvisivel(Mapa *mapa, ElementoMapa *blocoInvis);
 static void inserirItem(Mapa *mapa, ElementoMapa *item);
 static void inserirInimigo(Mapa *mapa, ElementoMapa *inimigo);
 
@@ -36,6 +38,9 @@ Mapa *carregarMapa(const char *caminhoArquivo)
 
     // aloca um novo mapa
     Mapa *novoMapa = (Mapa *)malloc(sizeof(Mapa));
+
+    novoMapa->blocoInvis = NULL;
+    novoMapa->quantidadeBlocoInvis = 0;
 
     novoMapa->obstaculos = NULL;
     novoMapa->quantidadeObstaculos = 0;
@@ -292,6 +297,22 @@ Mapa *carregarMapa(const char *caminhoArquivo)
 
                     inserirInimigo(novoMapa, el);
                 }
+                else if (c == '#'){
+
+                    int tamanhoDaTile = novoMapa->dimensaoPadraoElementos; // 48x48
+
+                    el->objeto = criarBlocoInvisivel(
+                        (Rectangle){
+                            .x = novoMapa->dimensaoPadraoElementos * colunaAtual,
+                            .y = novoMapa->dimensaoPadraoElementos * linhaAtual,
+                            .width = novoMapa->dimensaoPadraoElementos,
+                            .height = novoMapa->dimensaoPadraoElementos});
+
+                    el->tipo = TIPO_ELEMENTO_MAPA_BLOCO_INVISIVEL;
+
+                    inserirBlocoInvisivel(novoMapa, el);
+
+                }
                 else
                 {
                     TraceLog(LOG_ERROR, "Entidade inválida no mapa.");
@@ -355,6 +376,15 @@ void destruirMapa(Mapa *m)
             el = el->proximo;
             free(t);
         }
+
+        el = m->blocoInvis;
+        while (el != NULL)
+        {
+            destruirBlocoInvisivel((BlocoInvisivel *)el->objeto);
+            ElementoMapa *t = el;
+            el = el->proximo;
+            free(t);
+        }
     }
 }
 
@@ -409,6 +439,13 @@ void desenharMapa(Mapa *m)
         desenharInimigo((Inimigo *)el->objeto);
         el = el->proximo;
     }
+
+    el = m->blocoInvis;
+    while (el != NULL)
+    {
+        desenharBlocoInvisivel((BlocoInvisivel *)el->objeto);
+        el = el->proximo;
+    }
 }
 
 /**
@@ -442,6 +479,23 @@ static void inserirObstaculo(Mapa *mapa, ElementoMapa *obstaculo)
         mapa->obstaculos = obstaculo;
     }
     mapa->quantidadeObstaculos++;
+}
+
+/**
+ * @brief Insere um bloco invisível.
+ */
+static void inserirBlocoInvisivel(Mapa *mapa, ElementoMapa *blocoInvis)
+{
+    if (mapa->blocoInvis == NULL)
+    {
+        mapa->blocoInvis = blocoInvis;
+    }
+    else
+    {
+        blocoInvis->proximo = mapa->blocoInvis;
+        mapa->blocoInvis = blocoInvis;
+    }
+    mapa->quantidadeBlocoInvis++;
 }
 
 /**

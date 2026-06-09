@@ -93,6 +93,7 @@ typedef enum TipoItem {
  */
 typedef enum TipoElementoMapa {
     TIPO_ELEMENTO_MAPA_OBSTACULO,
+    TIPO_ELEMENTO_MAPA_BLOCO_INVISIVEL,
     TIPO_ELEMENTO_MAPA_ITEM,
     TIPO_ELEMENTO_MAPA_INIMIGO,
 } TipoElementoMapa;
@@ -339,6 +340,13 @@ typedef struct Obstaculo {
 } Obstaculo;
 
 /**
+ * @brief Representa um bloco invisível estático do mapa.
+ */
+typedef struct BlocoInvisivel {
+    Rectangle ret;
+} BlocoInvisivel;
+
+/**
  * @brief Representa um elemento do mapa.
  * O elemento de fato é endereçado via membro "objeto".
  */
@@ -357,6 +365,9 @@ typedef struct Mapa {
     // listas ligadas de elementos do mapa
     ElementoMapa *obstaculos; // marca o fim da lista
     int quantidadeObstaculos;
+
+    ElementoMapa *blocoInvis; //marca o fim da lista
+    int quantidadeBlocoInvis;
 
     ElementoMapa *itens;      // marca o fim da lista
     int quantidadeItens;
