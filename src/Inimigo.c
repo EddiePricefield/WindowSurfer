@@ -14,6 +14,7 @@
 #include "InimigoMalware.h"
 #include "InimigoSpyware.h"
 #include "InimigoAdware.h"
+#include "InimigoPonteiro.h"
 #include "Tipos.h"
 
 /**
@@ -44,6 +45,9 @@ void destruirInimigo( Inimigo *inimigo ) {
             case TIPO_INIMIGO_ADWARE:
                 destruirInimigoAdware( (InimigoAdware*) inimigo->objeto );
                 break;
+            case TIPO_INIMIGO_PONTEIRO:
+                destruirInimigoPonteiro( (InimigoPonteiro*) inimigo->objeto );
+                break;
             default:
                 break;
         }
@@ -66,6 +70,9 @@ void atualizarInimigo( Inimigo *inimigo, GameWorld *gw, float delta ) {
         case TIPO_INIMIGO_ADWARE:
             atualizarInimigoAdware( (InimigoAdware*) inimigo->objeto, gw, delta );
             break;
+        case TIPO_INIMIGO_PONTEIRO:
+            atualizarInimigoPonteiro( (InimigoPonteiro*) inimigo->objeto, gw, delta );
+            break;
         default:
             return;
     }
@@ -86,6 +93,9 @@ void desenharInimigo( Inimigo *inimigo ) {
             break;
         case TIPO_INIMIGO_ADWARE:
             desenharInimigoAdware( (InimigoAdware*) inimigo->objeto );
+            break;
+        case TIPO_INIMIGO_PONTEIRO:
+            desenharInimigoPonteiro( (InimigoPonteiro*) inimigo->objeto );
             break;
         default:
             return;

@@ -16,6 +16,7 @@
 #include "InimigoMalware.h"
 #include "InimigoSpyware.h"
 #include "InimigoAdware.h"
+#include "InimigoPonteiro.h"
 #include "Item.h"
 #include "ItemBit.h"
 #include "ItemByte.h"
@@ -848,6 +849,52 @@ static void resolverColisaoJogadorInimigosMapa( Jogador *j, Mapa *mapa ) {
                 if ( j->vel.y > 0 && ((retColCalculado.y + retColCalculado.height) <= (retColInimigoCalculado.y + retColInimigoCalculado.height * 0.75)) && j->estado >= ESTADO_JOGADOR_PULANDO && j->estado <= ESTADO_JOGADOR_PULANDO_CORRENDO ) {
                     j->vel.y = j->velPulo;
                     adware->estado = ESTADO_INIMIGO_ADWARE_MORRENDO;
+                    j->scoreTotal += 100;
+                    PlaySound( rm.somHitInimigo );
+                } else if ( !j->invulneravel ) {
+                    if ( j->quantidadeHP > 0 ) {
+                        j->quantidadeHP--;
+                        PlaySound( rm.somHit );
+                    } else {
+                        j->morreu = true;
+                        PlaySound( rm.somMorte );
+                    }
+                    j->invulneravel = true;
+                }
+
+                return; // um inimigo de cada vez!
+
+            }
+        } else if ( inimigo->tipo == TIPO_INIMIGO_PONTEIRO ) {
+
+            InimigoPonteiro *ponteiro = (InimigoPonteiro*) inimigo->objeto;
+
+            if ( !ponteiro->ativo || ponteiro->estado == ESTADO_INIMIGO_PONTEIRO_MORRENDO ) {
+                el = el->proximo;
+                continue;
+            }
+
+            qaInimigo = getQuadroAnimacaoAtualInimigoPonteiro( ponteiro );
+            olhandoParaDireita = &ponteiro->olhandoParaDireita;
+            ret = &ponteiro->ret;
+
+            float deslocamentoX = *olhandoParaDireita
+                ? ret->width - qaInimigo->retColisao.x - qaInimigo->retColisao.width
+                : qaInimigo->retColisao.x;
+            float deslocamentoY = qaInimigo->retColisao.y;
+
+            Rectangle retColInimigoCalculado = {
+                ret->x + deslocamentoX,
+                ret->y + deslocamentoY,
+                qaInimigo->retColisao.width,
+                qaInimigo->retColisao.height
+            };
+
+            if ( CheckCollisionRecs( retColCalculado, retColInimigoCalculado ) ) {
+
+                if ( j->vel.y > 0 && ((retColCalculado.y + retColCalculado.height) <= (retColInimigoCalculado.y + retColInimigoCalculado.height * 0.75)) && j->estado >= ESTADO_JOGADOR_PULANDO && j->estado <= ESTADO_JOGADOR_PULANDO_CORRENDO ) {
+                    j->vel.y = j->velPulo;
+                    ponteiro->estado = ESTADO_INIMIGO_PONTEIRO_MORRENDO;
                     j->scoreTotal += 100;
                     PlaySound( rm.somHitInimigo );
                 } else if ( !j->invulneravel ) {

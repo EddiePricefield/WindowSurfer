@@ -42,6 +42,14 @@ typedef enum EstadoInimigoSpyware {
 } EstadoInimigoSpyware;
 
 /**
+ * @brief Representa o estado do inimigo do tipo Poteiro.
+ */
+typedef enum EstadoInimigoPonteiro {
+    ESTADO_INIMIGO_PONTEIRO_ANDANDO,
+    ESTADO_INIMIGO_PONTEIRO_MORRENDO,
+} EstadoInimigoPonteiro;
+
+/**
  * @brief Representa o estado do inimigo do tipo Adware.
  */
 typedef enum EstadoInimigoAdware {
@@ -56,6 +64,7 @@ typedef enum TipoInimigo {
     TIPO_INIMIGO_MALWARE,
     TIPO_INIMIGO_SPYWARE,
     TIPO_INIMIGO_ADWARE,
+    TIPO_INIMIGO_PONTEIRO,
 } TipoInimigo;
 
 /**
@@ -275,6 +284,30 @@ typedef struct InimigoAdware {
 } InimigoAdware;
 
 /**
+ * @brief Representa um inimigo do tipo Ponteiro.
+ */
+typedef struct InimigoPonteiro {
+
+    Rectangle ret;
+    Vector2 vel;
+    Color cor;
+
+    float velAndando;
+    float velMaxQueda;
+
+    EstadoInimigoPonteiro estado;
+    bool ativo;
+    bool olhandoParaDireita;
+
+    Animacao *animacoes[2];
+    int quantidadeAnimacoes;
+
+    Animacao animacaoAndando;
+    Animacao animacaoMorrendo;
+
+} InimigoPonteiro;
+
+/**
  * @brief Representa um inimigo.
  * O inimigo de fato é endereçado via membro "objeto".
  */
@@ -432,4 +465,6 @@ typedef struct GameWorld {
 
     float gravidade;
 
-} GameWorld;
+} GameWorld;/**
+ * @brief Representa um inimigo do tipo Spyware.
+ */
