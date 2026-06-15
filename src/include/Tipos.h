@@ -124,7 +124,11 @@ typedef enum TipoElementoMapa {
  * @brief Representa o estado atual do jogo
  */
 typedef enum EstadoJogo {
-    ESTADO_JOGO_NADA,
+    ESTADO_JOGO_MENU_INICIAL,
+    ESTADO_JOGO_MENU_PAUSA,
+    ESTADO_JOGO_INICIO,
+    ESTADO_JOGO_VITORIA,
+    ESTADO_JOGO_DERROTA,
     ESTADO_JOGO_MAPA1,
     ESTADO_JOGO_MAPA2,
 } EstadoJogo;

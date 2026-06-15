@@ -35,7 +35,8 @@ static void desenharNumPequeno( const char *texto, Vector2 posicao );
 
 static void verificarJogadorMorto( GameWorld *gw );
 
-EstadoJogo estadoJogoAtual = ESTADO_JOGO_MAPA1;
+EstadoJogo estadoJogoAtual = ESTADO_JOGO_MENU_INICIAL;
+EstadoJogo estadoJogoAnterior = ESTADO_JOGO_MAPA1;
 bool mudarFase = false;
 
 /**
@@ -43,8 +44,9 @@ bool mudarFase = false;
  */
 GameWorld *createGameWorld( void ) {
     GameWorld *gw = (GameWorld*) malloc( sizeof( GameWorld ) );
+    gw->mapa = NULL;
+    gw->jogador = NULL;
     inicializar( gw );
-    reiniciar( gw );
     return gw;
 }
 
@@ -64,28 +66,54 @@ void destroyGameWorld( GameWorld *gw ) {
  */
 void updateGameWorld( GameWorld *gw, float delta ) {
 
-    if ( !IsMusicStreamPlaying( rm.musicaFase01 ) ) {
-        PlayMusicStream( rm.musicaFase01 );
-    } else {
-        UpdateMusicStream( rm.musicaFase01 );
-    }
+    switch (estadoJogoAtual){
+        case ESTADO_JOGO_MENU_INICIAL:
+            if ( GetKeyPressed() > 0 ) { 
+                alterarEstadoJogo(ESTADO_JOGO_MAPA1);
+                inicializar(gw);
+            }
+            break;
+        case ESTADO_JOGO_MENU_PAUSA:
+            if ( GetKeyPressed() > 0 ) { 
+                estadoJogoAtual = estadoJogoAnterior;
+            }
+            break;
+        case ESTADO_JOGO_DERROTA:
+            if ( GetKeyPressed() > 0 ) { 
+                alterarEstadoJogo(ESTADO_JOGO_MAPA1);
+                inicializar(gw);
+            }
+            break;
+        default:
+            if ( !IsMusicStreamPlaying( rm.musicaFase01 ) ) {
+                PlayMusicStream( rm.musicaFase01 );
+            } else {
+                UpdateMusicStream( rm.musicaFase01 );
+            }
 
-    if ( IsKeyPressed( KEY_R ) || mudarFase ) {
-        reiniciar( gw );
-        mudarFase = false;
-        return;
-    }
+            if ( IsKeyPressed( KEY_R ) || mudarFase ) {
+                reiniciar( gw );
+                mudarFase = false;
+                return;
+            }
 
-    if ( IsKeyPressed( KEY_P ) ) {
-        printf("Posicao X: %f || Posicao Y: %f\n", gw->jogador->ret.x, gw->jogador->ret.y);
-    }
+            if ( IsKeyPressed( KEY_P ) ) {
+                printf("Posicao X: %f || Posicao Y: %f\n", gw->jogador->ret.x, gw->jogador->ret.y);
+            }
 
-    Jogador *j = gw->jogador;
-    atualizarMapa( gw->mapa, gw, delta );
-    entradaJogador( j, delta );
-    atualizarJogador( j, gw, delta );
-    atualizarCamera( gw );
-    verificarJogadorMorto( gw );
+            if ( IsKeyPressed( KEY_ENTER ) ) {
+                estadoJogoAtual = ESTADO_JOGO_MENU_PAUSA;
+            }
+
+            Jogador *j = gw->jogador;
+            atualizarMapa( gw->mapa, gw, delta );
+            entradaJogador( j, delta );
+            atualizarJogador( j, gw, delta );
+            atualizarCamera( gw );
+            verificarJogadorMorto( gw );
+            break;
+    }
+    
 
 }
 
@@ -95,27 +123,47 @@ void updateGameWorld( GameWorld *gw, float delta ) {
 void drawGameWorld( GameWorld *gw ) {
 
     BeginDrawing();
-    ClearBackground( (Color) { 36, 0, 180, 255 } );
 
-    BeginMode2D( gw->camera );
-    desenharFundo( gw );
-    desenharMapa( gw->mapa );
-    desenharJogador( gw->jogador );
-    EndMode2D();
+    switch (estadoJogoAtual){
+        case ESTADO_JOGO_MENU_INICIAL:
+            ClearBackground(BLACK);
+            DrawText("Pressione qualquer tecla!", 75, 200, 50, WHITE);
+            break;
+        case ESTADO_JOGO_DERROTA:
+            ClearBackground(BLACK);
+            DrawText("ja era parsa", 275, 200, 50, WHITE);
+            break;
+        default:
+            ClearBackground( (Color) { 36, 0, 180, 255 } );
 
-    desenharHud( gw );
+            BeginMode2D( gw->camera );
+            desenharFundo( gw );
+            desenharMapa( gw->mapa );
+            desenharJogador( gw->jogador );
+            EndMode2D();
 
-    // DrawText( TextFormat( "Anéis: %d", gw->jogador->quantidadeBits ), 10, 10, 20, ORANGE );
-    // DrawText( TextFormat( "Vidas: %d", gw->jogador->quantidadeVidas ), 10, 30, 20, ORANGE );
-    // DrawText( 
-    //     TextFormat( 
-    //         "Invulnerável: %s%s", 
-    //         gw->jogador->invulneravel ? "sim" : "não",
-    //         gw->jogador->invulneravel ? TextFormat( " (%.2fs/%.2fs)", gw->jogador->contadorTempoInvulnerabilidade, gw->jogador->tempoInvulnerabilidade ) : ""
-    //     ), 
-    //     10, 50, 20, ORANGE
-    // );
-    DrawFPS( 10, 120 );
+            desenharHud( gw );
+
+            // DrawText( TextFormat( "Anéis: %d", gw->jogador->quantidadeBits ), 10, 10, 20, ORANGE );
+            // DrawText( TextFormat( "Vidas: %d", gw->jogador->quantidadeVidas ), 10, 30, 20, ORANGE );
+            // DrawText( 
+            //     TextFormat( 
+            //         "Invulnerável: %s%s", 
+            //         gw->jogador->invulneravel ? "sim" : "não",
+            //         gw->jogador->invulneravel ? TextFormat( " (%.2fs/%.2fs)", gw->jogador->contadorTempoInvulnerabilidade, gw->jogador->tempoInvulnerabilidade ) : ""
+            //     ), 
+            //     10, 50, 20, ORANGE
+            // );
+            DrawFPS( 10, 120 );
+
+             if (estadoJogoAtual == ESTADO_JOGO_MENU_PAUSA){
+                DrawRectangle(0, 0, 800, 450, (Color) { 0, 0, 0, 175 });
+                DrawText("PAUSADO", 275, 200, 50, WHITE);
+            }
+
+            break;
+    }
+    
 
     EndDrawing();
 
@@ -154,10 +202,6 @@ static void desenharHud( GameWorld *gw ) {
 
     // Vidas //
     int vidas = gw->jogador->quantidadeVidas;
-
-    if (vidas < 0) {
-        vidas = 99;
-    }
 
     const char *textoVidas = TextFormat("%d", vidas);
     Vector2 posicaoVidas = { 106, 428 };
@@ -275,14 +319,16 @@ static void atualizarCamera( GameWorld *gw ) {
 static void inicializar( GameWorld *gw ) {
 
     switch ( estadoJogoAtual ) {
-        case ESTADO_JOGO_NADA:
+        case ESTADO_JOGO_MENU_PAUSA:
             return;
             break;
         case ESTADO_JOGO_MAPA1:
+            estadoJogoAnterior = ESTADO_JOGO_MAPA1;
             gw->mapa = carregarMapa( "resources/mapas/mapa01.txt" );
             gw->jogador = criarJogador( 144, 144, 96, 96 );
             break;
-            case ESTADO_JOGO_MAPA2:
+        case ESTADO_JOGO_MAPA2:
+            estadoJogoAnterior = ESTADO_JOGO_MAPA2;
             gw->mapa = carregarMapa( "resources/mapas/mapaTeste.txt" );
             gw->jogador = criarJogador( GetScreenWidth() / 2 + 144, calcularAlturaMapa( gw->mapa ) - 1000, 96, 96 );
             break;
@@ -298,14 +344,24 @@ static void inicializar( GameWorld *gw ) {
 
     gw->gravidade = 1200;
 
-    printf("Altura: %d\n", calcularAlturaMapa( gw->mapa ) );
+    if (gw->mapa != NULL){
+        printf("Altura: %d\n", calcularAlturaMapa( gw->mapa ) );
+    }
+    
 
 }
 
 static void reiniciar( GameWorld *gw ) {
 
-    destruirMapa( gw->mapa );
-    destruirJogador( gw->jogador );
+
+    if( gw->mapa != NULL ){
+        destruirMapa( gw->mapa );
+    }
+    
+    if( gw->jogador != NULL){
+        destruirJogador( gw->jogador );
+    }
+    
 
     if ( IsMusicStreamPlaying( rm.musicaFase01 ) ) {
         StopMusicStream( rm.musicaFase01 );
@@ -322,7 +378,14 @@ void alterarEstadoJogo(EstadoJogo novoEstado ){
 
 static void verificarJogadorMorto( GameWorld *gw ) {
     if(gw->jogador->morreu) {
-        gw->jogador->quantidadeVidas--;
-        reiniciar(gw);
+        if(gw->jogador->quantidadeVidas > 0){
+            gw->jogador->quantidadeVidas--;
+            int vidaPosMorte = gw->jogador->quantidadeVidas;
+            reiniciar(gw);
+            gw->jogador->quantidadeVidas = vidaPosMorte;
+        }else{
+            alterarEstadoJogo(ESTADO_JOGO_DERROTA);
+        }
+        
     }
 }
