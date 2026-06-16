@@ -117,7 +117,7 @@ void loadResourcesResourceManager( void ) {
     rm.somMorte = LoadSound( "resources/sons/efeitos/morte.wav" );
     rm.somPulo = LoadSound( "resources/sons/efeitos/pulo.wav" );
 
-    rm.musicaFase01 = LoadMusicStream( "resources/sons/musicas/golf-central.mp3" );
+    rm.musicaFase01 = LoadMusicStream( "resources/sons/musicas/piano2.mp3" );
 
     SetSoundVolume( rm.somColeta, 0.8f );
     SetSoundVolume( rm.somFrenagem, 0.0f );
@@ -125,10 +125,10 @@ void loadResourcesResourceManager( void ) {
     SetSoundVolume( rm.somHitInimigo, 1.3f );
     SetSoundVolume( rm.somPulo, 0.8f );
     
-    SetMusicVolume( rm.musicaFase01, 0.0f );
+    SetMusicVolume( rm.musicaFase01, 0.75f );
 
 
-    SetMasterVolume( 0.2f);
+    SetMasterVolume( 1.0f);
 
 }
 
