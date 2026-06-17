@@ -7,6 +7,7 @@
  */
 #include <stdlib.h>
 #include <stdbool.h>
+#include <math.h>
 
 #include "GameWindow.h"
 #include "GameWorld.h"
@@ -93,6 +94,17 @@ void initGameWindow( GameWindow *gameWindow ) {
 
         InitWindow( gameWindow->width, gameWindow->height, gameWindow->title );
 
+        gameWindow->renderTarget = LoadRenderTexture(
+            LARGURA_VIRTUAL,
+            ALTURA_VIRTUAL
+        );
+
+        SetTextureFilter(
+            gameWindow->renderTarget.texture,
+            TEXTURE_FILTER_POINT
+        );
+
+
         if ( gameWindow->initAudio ) {
             InitAudioDevice();
         }
@@ -117,10 +129,38 @@ void initGameWindow( GameWindow *gameWindow ) {
                 delta = 1.0f / 30.0f;
             }
 
-            updateGameWorld( gameWindow->gw, delta );
-            drawGameWorld( gameWindow->gw );
+             updateGameWorld( gameWindow->gw, delta );
 
+            BeginTextureMode( gameWindow->renderTarget );
+            drawGameWorld( gameWindow->gw );
+            EndTextureMode();
+
+            BeginDrawing();
+            ClearBackground( BLACK );
+            float escala = fminf(
+                (float)GetScreenWidth() / LARGURA_VIRTUAL,
+                (float)GetScreenHeight() / ALTURA_VIRTUAL
+            );
+            float larguraFinal = LARGURA_VIRTUAL * escala;
+            float alturaFinal = ALTURA_VIRTUAL * escala;
+            float offsetX = (GetScreenWidth() - larguraFinal) / 2;
+            float offsetY = (GetScreenHeight() - alturaFinal) / 2;
+
+            DrawTexturePro(
+                gameWindow->renderTarget.texture,
+                (Rectangle){0, 0, LARGURA_VIRTUAL, -ALTURA_VIRTUAL},
+                (Rectangle){offsetX, offsetY, larguraFinal, alturaFinal},
+                (Vector2){0,0},
+                0,
+                WHITE
+            );
+            if(IsKeyPressed(KEY_F11)){
+                ToggleFullscreen();
+            }
             
+
+            EndDrawing();
+
         }
 
         if ( gameWindow->loadResources ) {

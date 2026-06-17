@@ -1,6 +1,5 @@
 /**
- * @file GameWindow.h
- * @author @EddiePricefield & @rogerioccastro
+  * @author @EddiePricefield & @rogerioccastro
  * @brief GameWindow struct and function declarations.
  * 
  * @copyright Copyright (c) 2026
@@ -10,6 +9,9 @@
 #include <stdbool.h>
 
 #include "GameWorld.h"
+
+#define LARGURA_VIRTUAL 800
+#define ALTURA_VIRTUAL 450
 
 typedef struct GameWindow {
 
@@ -27,6 +29,8 @@ typedef struct GameWindow {
     bool alwaysRun;
     bool loadResources;
     bool initAudio;
+
+    RenderTexture2D renderTarget;
 
     GameWorld *gw;
 
