@@ -38,6 +38,7 @@ static void verificarJogadorMorto( GameWorld *gw );
 EstadoJogo estadoJogoAtual = ESTADO_JOGO_MENU_INICIAL;
 EstadoJogo estadoJogoAnterior = ESTADO_JOGO_MAPA1;
 bool mudarFase = false;
+float cronometro = 0;
 
 /**
  * @brief Cria uma instância alocada dinamicamente da struct GameWorld.
@@ -83,6 +84,14 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                 alterarEstadoJogo(ESTADO_JOGO_MAPA1);
                 inicializar(gw);
             }
+            break;
+        case ESTADO_JOGO_VITORIA:
+            cronometro += delta;
+
+            if (cronometro >= 5){
+                alterarEstadoJogo(++estadoJogoAnterior);
+            }
+            
             break;
         default:
             if ( !IsMusicStreamPlaying( rm.musicaFase01 ) ) {
@@ -132,6 +141,10 @@ void drawGameWorld( GameWorld *gw ) {
         case ESTADO_JOGO_DERROTA:
             ClearBackground(BLACK);
             DrawText("ja era parsa", 275, 200, 50, WHITE);
+            break;
+        case ESTADO_JOGO_VITORIA:
+            ClearBackground(BLACK);
+            DrawText("Transicao", 275, 200, 50, WHITE);
             break;
         default:
             ClearBackground( (Color) { 36, 0, 180, 255 } );

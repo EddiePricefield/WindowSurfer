@@ -103,7 +103,7 @@ void atualizarItemAtalho( ItemAtalho *item, float delta ) {
         atualizarAnimacao( animacaoAtual, delta );
         if ( item->estado == ESTADO_ITEM_ATALHO_COLETADO && animacaoAtual->finalizada ) {
             item->ativo = false;
-            alterarEstadoJogo( ESTADO_JOGO_MAPA2 );
+            alterarEstadoJogo( ESTADO_JOGO_VITORIA );
             return;
         }
     }
