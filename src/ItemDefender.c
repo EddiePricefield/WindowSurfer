@@ -67,7 +67,7 @@ ItemDefender *criarItemDefender( Rectangle ret, Color cor ) {
         novoItem->animacaoColetando.quadros,
         novoItem->animacaoColetando.quantidadeQuadros,
         80,               // duração padrão para todos os quadros
-        1, 52,            // início
+        1, 18,            // início
         16, 16,           // dimensões
         1,                // separação
         false,            // de trás para frente
