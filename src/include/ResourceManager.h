@@ -9,6 +9,8 @@
 
 #include "raylib/raylib.h"
 
+#define VOLUME_PADRAO_MUSICA 0.75f
+
 typedef struct ResourceManager {
 
     Texture2D texturaJanela1;
@@ -39,6 +41,7 @@ typedef struct ResourceManager {
     Sound somMorte;
     Sound somPulo;
     Sound somClick;
+    Sound somGameOver;
 
     Music musicaFase01;
 
