@@ -38,6 +38,7 @@ typedef struct ResourceManager {
     Sound somHitInimigo;
     Sound somMorte;
     Sound somPulo;
+    Sound somClick;
 
     Music musicaFase01;
 

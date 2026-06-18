@@ -141,6 +141,7 @@ void loadResourcesResourceManager( void ) {
     rm.somHitInimigo = LoadSound( "resources/sons/efeitos/hitInimigo.wav" );
     rm.somMorte = LoadSound( "resources/sons/efeitos/morte.wav" );
     rm.somPulo = LoadSound( "resources/sons/efeitos/pulo.wav" );
+    rm.somClick = LoadSound( "resources/sons/efeitos/click.wav" );
 
     rm.musicaFase01 = LoadMusicStream( "resources/sons/musicas/piano2.mp3" );
 

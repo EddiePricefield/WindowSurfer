@@ -47,6 +47,10 @@ EstadoBotao botaoIniciar = BOTAO_SELECIONADO;
 EstadoBotao botaoSair = BOTAO_PARADO;
 
 bool mudarFase = false;
+bool iniciarTransicao = false;
+
+float fade = 0;
+float tempoFade = 0.5;
 
 float cronometro = 0;
 float tempoInicioAnimacaoMorte = 0.0f;
@@ -83,8 +87,8 @@ void updateGameWorld( GameWorld *gw, float delta ) {
         cronometro += delta;
 
         if (cronometro >= 0.1 ){
-            alterarEstadoJogo(ESTADO_JOGO_MAPA1);
-            inicializar(gw);
+            estadoJogoAnterior = ESTADO_JOGO_DERROTA;
+            alterarEstadoJogo(ESTADO_JOGO_TRANSICAO);
             cronometro = 0;
             botaoIniciar = BOTAO_PARADO;
         }
@@ -109,8 +113,10 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                 if ( IsKeyPressed( KEY_ENTER ) ) { 
 
                     botaoIniciar = BOTAO_CLICADO;
+                    PlaySound(rm.somColeta);
                     
                 } else if ( IsKeyPressed( KEY_DOWN ) || IsKeyPressed( KEY_S ) ){
+                    PlaySound(rm.somClick);
                     botaoIniciar = BOTAO_PARADO;
                     botaoSair = BOTAO_SELECIONADO;
                 }
@@ -122,8 +128,10 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                 if ( IsKeyPressed( KEY_ENTER ) ) { 
 
                     botaoSair = BOTAO_CLICADO;
+                    PlaySound(rm.somColeta);
                     
                 } else if ( IsKeyPressed( KEY_UP ) || IsKeyPressed( KEY_W ) ){
+                    PlaySound(rm.somClick);
                     botaoSair = BOTAO_PARADO;
                     botaoIniciar = BOTAO_SELECIONADO;
                 }
@@ -140,20 +148,35 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             cronometro += delta;
 
             if (cronometro >= 3){
-                alterarEstadoJogo(ESTADO_JOGO_MAPA1);
+                estadoJogoAnterior = ESTADO_JOGO_DERROTA;
+                alterarEstadoJogo(ESTADO_JOGO_TRANSICAO);
                 inicializar(gw);
                 cronometro = 0;
             }
             break;
-        case ESTADO_JOGO_VITORIA:
+        case ESTADO_JOGO_TRANSICAO:
             cronometro += delta;
 
-            if (cronometro >= 5){
+            if (cronometro <= tempoFade){
+                fade += 255 / tempoFade * delta;
+            } else{
+
+                cronometro = 0;
+
+                if(estadoJogoAnterior == ESTADO_JOGO_DERROTA){
+                    inicializar(gw);
+                }
                 alterarEstadoJogo(++estadoJogoAnterior);
             }
-            
             break;
         default:
+            
+            if (fade > 0){
+                fade -= 255 / tempoFade * delta;
+            } else{
+                fade = 0;
+            }
+
             if ( !IsMusicStreamPlaying( rm.musicaFase01 ) ) {
                 PlayMusicStream( rm.musicaFase01 );
             } else {
@@ -228,36 +251,39 @@ void drawGameWorld( GameWorld *gw ) {
             ClearBackground(BLACK);
             DesenharTelaMorte( rm.texturaTelaMorte, (Rectangle){0, 0, 800, 450}, (Vector2){ 0, 0 }, WHITE );
             break;
-        case ESTADO_JOGO_VITORIA:
-            ClearBackground(BLACK);
-            DrawText("Transicao", 275, 200, 50, WHITE);
-            break;
         default:
-            ClearBackground( (Color) { 36, 0, 180, 255 } );
 
-            BeginMode2D( gw->camera );
-            desenharFundo( gw );
-            desenharMapa( gw->mapa );
-            desenharJogador( gw->jogador );
-            EndMode2D();
+            if(gw->jogador != NULL){
 
-            desenharHud( gw );
+                BeginMode2D( gw->camera );
+                desenharFundo( gw );
+                desenharMapa( gw->mapa );
+                desenharJogador( gw->jogador );
+                EndMode2D();
 
-            // DrawText( TextFormat( "Anéis: %d", gw->jogador->quantidadeBits ), 10, 10, 20, ORANGE );
-            // DrawText( TextFormat( "Vidas: %d", gw->jogador->quantidadeVidas ), 10, 30, 20, ORANGE );
-            // DrawText( 
-            //     TextFormat( 
-            //         "Invulnerável: %s%s", 
-            //         gw->jogador->invulneravel ? "sim" : "não",
-            //         gw->jogador->invulneravel ? TextFormat( " (%.2fs/%.2fs)", gw->jogador->contadorTempoInvulnerabilidade, gw->jogador->tempoInvulnerabilidade ) : ""
-            //     ), 
-            //     10, 50, 20, ORANGE
-            // );
-            DrawFPS( 10, 120 );
+                desenharHud( gw );
 
-             if (estadoJogoAtual == ESTADO_JOGO_MENU_PAUSA){
-                DrawRectangle(0, 0, 800, 450, (Color) { 0, 0, 0, 175 });
-                DrawText("PAUSADO", 275, 200, 50, WHITE);
+                // DrawText( TextFormat( "Anéis: %d", gw->jogador->quantidadeBits ), 10, 10, 20, ORANGE );
+                // DrawText( TextFormat( "Vidas: %d", gw->jogador->quantidadeVidas ), 10, 30, 20, ORANGE );
+                // DrawText( 
+                //     TextFormat( 
+                //         "Invulnerável: %s%s", 
+                //         gw->jogador->invulneravel ? "sim" : "não",
+                //         gw->jogador->invulneravel ? TextFormat( " (%.2fs/%.2fs)", gw->jogador->contadorTempoInvulnerabilidade, gw->jogador->tempoInvulnerabilidade ) : ""
+                //     ), 
+                //     10, 50, 20, ORANGE
+                // );
+                DrawFPS( 10, 120 );
+
+                if (estadoJogoAtual == ESTADO_JOGO_MENU_PAUSA){
+                    DrawRectangle(0, 0, 800, 450, (Color) { 0, 0, 0, 175 });
+                    DrawText("PAUSADO", 275, 200, 50, WHITE);
+                }
+
+            }
+
+            if (fade > 0){
+                DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), (Color){0, 0, 0, fade});
             }
 
             break;
