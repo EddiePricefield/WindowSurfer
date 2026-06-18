@@ -38,6 +38,7 @@ static void verificarJogadorMorto( GameWorld *gw );
 
 static void DesenharPopup(Texture2D texture, Rectangle source, Vector2 position, Color tint);
 static void DesenharTitulo(Texture2D texture, Rectangle source, Vector2 position, Color tint);
+static void DesenharTelaMorte(Texture2D texture, Rectangle source, Vector2 position, Color tint);
 
 EstadoJogo estadoJogoAtual = ESTADO_JOGO_MENU_INICIAL;
 EstadoJogo estadoJogoAnterior = ESTADO_JOGO_MAPA1;
@@ -48,6 +49,7 @@ EstadoBotao botaoSair = BOTAO_PARADO;
 bool mudarFase = false;
 
 float cronometro = 0;
+float tempoInicioAnimacaoMorte = 0.0f;
 
 /**
  * @brief Cria uma instância alocada dinamicamente da struct GameWorld.
@@ -135,9 +137,12 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             }
             break;
         case ESTADO_JOGO_DERROTA:
-            if ( GetKeyPressed() > 0 ) { 
+            cronometro += delta;
+
+            if (cronometro >= 3){
                 alterarEstadoJogo(ESTADO_JOGO_MAPA1);
                 inicializar(gw);
+                cronometro = 0;
             }
             break;
         case ESTADO_JOGO_VITORIA:
@@ -221,7 +226,7 @@ void drawGameWorld( GameWorld *gw ) {
             break;
         case ESTADO_JOGO_DERROTA:
             ClearBackground(BLACK);
-            DrawText("ja era parsa", 275, 200, 50, WHITE);
+            DesenharTelaMorte( rm.texturaTelaMorte, (Rectangle){0, 0, 800, 450}, (Vector2){ 0, 0 }, WHITE );
             break;
         case ESTADO_JOGO_VITORIA:
             ClearBackground(BLACK);
@@ -444,6 +449,57 @@ static void DesenharPopup(Texture2D texture, Rectangle source, Vector2 position,
     DrawTextureRec(texture, source, (Vector2){ position.x + numeroAleatorio, position.y + numeroAleatorio }, tint);
 }
 
+static void DesenharTelaMorte(Texture2D texture, Rectangle source, Vector2 position, Color tint) {
+    float frameHeight = 450.0f;
+
+    int numFrames = 13;
+    float frameWidth = texture.width / numFrames;
+    
+    int frameDurations[] = {1, 1, 1, 6, 5, 24, 14, 8, 5, 9, 15, 4, 80};
+    float frameDuration = 0.03f;
+
+    float tempoDecorrido = GetTime() - tempoInicioAnimacaoMorte;
+    int frameUnits = (int)(tempoDecorrido / frameDuration);
+
+    int totalDuration = 0;
+    for (int i = 0; i < numFrames; i++) {
+        totalDuration += frameDurations[i];
+    }
+
+    int posicaoCiclo = frameUnits % totalDuration;
+    
+    int frameIndex = 0;
+    int accumulatedDuration = 0;
+    for (int i = 0; i < numFrames; i++) {
+        accumulatedDuration += frameDurations[i];
+        if (posicaoCiclo < accumulatedDuration) {
+            frameIndex = i;
+            break;
+        }
+    }
+    
+    Rectangle frameSource = {
+        frameIndex * frameWidth,
+        0,
+        frameWidth,
+        frameHeight
+    };
+    
+    DrawTexturePro(
+        texture,
+        frameSource,
+        (Rectangle) {
+            position.x,
+            position.y,
+            frameWidth,
+            frameHeight
+        },
+        (Vector2) { 0 },
+        0.0f,
+        tint
+    );
+}
+
 static void DesenharTitulo(Texture2D texture, Rectangle source, Vector2 position, Color tint) {
     
     float tempo = GetTime() * 3.0f; 
@@ -532,6 +588,8 @@ static void verificarJogadorMorto( GameWorld *gw ) {
             reiniciar(gw);
             gw->jogador->quantidadeVidas = vidaPosMorte;
         }else{
+            cronometro = 0;
+            tempoInicioAnimacaoMorte = GetTime();
             alterarEstadoJogo(ESTADO_JOGO_DERROTA);
         }
         

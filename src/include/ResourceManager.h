@@ -30,6 +30,8 @@ typedef struct ResourceManager {
     Texture2D texturaPopUp;
     Texture2D texturaMenuInicial;
 
+    Texture2D texturaTelaMorte;
+
     Sound somColeta;
     Sound somFrenagem;
     Sound somHit;

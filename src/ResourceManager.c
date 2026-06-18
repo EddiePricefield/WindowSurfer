@@ -108,13 +108,13 @@ void loadResourcesResourceManager( void ) {
         },
         1
     );
-
     rm.texturaTerreno = LoadTexture( "resources/imagens/tiles/terreno.png" );
     rm.texturaCeu = LoadTexture( "resources/imagens/fundo/ceu.png" );
 
     rm.texturaJanela1 = LoadTexture("resources/imagens/janelas/janela1.png");
-    rm.texturaJanela = LoadTexture("resources/imagens/tiles/janelatile.png"); 
+    rm.texturaJanela = LoadTexture("resources/imagens/tiles/janelatile.png");
 
+    rm.texturaTelaMorte = LoadTexture("resources/imagens/fundo/morte-sheet.png");
 
     // Filtro de textura nearest-neighbor (ponto) para todas as texturas do jogo.
     // Evita interpolação bilinear nas bordas dos tiles e sprites, que causaria
@@ -133,6 +133,7 @@ void loadResourcesResourceManager( void ) {
     SetTextureFilter( rm.texturaJanela1, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaJanela, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaMenuInicial, TEXTURE_FILTER_POINT );
+    SetTextureFilter( rm.texturaTelaMorte, TEXTURE_FILTER_POINT );
 
     rm.somColeta = LoadSound( "resources/sons/efeitos/bit.wav" );
     rm.somFrenagem = LoadSound( "resources/sons/efeitos/frenagem.wav" );
@@ -149,7 +150,7 @@ void loadResourcesResourceManager( void ) {
     SetSoundVolume( rm.somHitInimigo, 1.3f );
     SetSoundVolume( rm.somPulo, 0.8f );
     
-    SetMusicVolume( rm.musicaFase01, 0.0f );
+    SetMusicVolume( rm.musicaFase01, 0.75f );
 
 
     SetMasterVolume( 1.0f);
@@ -172,6 +173,7 @@ void unloadResourcesResourceManager( void ) {
     UnloadTexture( rm.texturaJanela1 );
     UnloadTexture( rm.texturaJanela );
     UnloadTexture( rm.texturaMenuInicial );
+    UnloadTexture( rm.texturaTelaMorte );
     UnloadSound( rm.somColeta );
     UnloadSound( rm.somFrenagem );
     UnloadSound( rm.somHit );
