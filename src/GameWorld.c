@@ -185,7 +185,7 @@ static void desenharHud( GameWorld *gw ) {
     // Desenhando os Valores Fixos //
 
     // DrawTextureRec( rm.texturaHud, (Rectangle){ 2, 36, 79, 99 }, (Vector2){ 10, 10 }, WHITE ); //Hud Superior
-    DrawTextureRec( rm.texturaHud, (Rectangle){ 2, 2, 95, 31 }, (Vector2){ 10, 410 }, WHITE ); //Hud Inferior
+    DrawTextureRec( rm.texturaHud, (Rectangle){ 0, 0, 95, 38 }, (Vector2){ 10, 400 }, WHITE ); //Hud Inferior
 
     // Desenhando os Valores Variáveis //
 
@@ -215,7 +215,7 @@ static void desenharHud( GameWorld *gw ) {
     int vidas = gw->jogador->quantidadeVidas;
 
     const char *textoVidas = TextFormat("%d", vidas);
-    Vector2 posicaoVidas = { 106, 428 };
+    Vector2 posicaoVidas = { 90, 413 };
     desenharNumPequeno(textoVidas, posicaoVidas);
 
     // HP //
@@ -263,16 +263,16 @@ static void desenharNumGrande( const char *texto, Vector2 posicao, int direcaoTe
     for (int i = 0; texto[i] != '\0'; i++) {
 
         if (texto[i] == ' ') {
-            DrawTextureRec( rm.texturaHud, (Rectangle){ 95, 178, 5, 13 }, (Vector2){ posicao.x + 6, posicao.y + 8 }, WHITE ); //Dois Pontos do Tempo
+            DrawTextureRec( rm.texturaHud, (Rectangle){ 92, 178, 5, 13 }, (Vector2){ posicao.x + 6, posicao.y + 8 }, WHITE ); //Dois Pontos do Tempo
             posicao.x += 16;
             continue;
         }
         
         int digito = texto[i] - '0';
 
-        int spriteX = 2 + (digito * (16 + 2));
+        int spriteX = (digito * (16 + 2)) + 1;
         
-        DrawTextureRec( rm.texturaHud, (Rectangle){ spriteX, 138, 15, 31 }, posicao, WHITE );
+        DrawTextureRec( rm.texturaHud, (Rectangle){ spriteX, 138, 19, 31 }, posicao, WHITE );
         
         posicao.x += 16;
     }
@@ -290,14 +290,14 @@ static void desenharNumPequeno( const char *texto, Vector2 posicao ) {
         int spriteY = 172;
         
         if (digito >= 0 && digito <= 4) {
-            spriteX = 2 + (digito * (16 + 2));
-            spriteY = 172;
+            spriteX = 1 + (digito * (16 + 2));
+            spriteY = 138;
         } else {
             spriteX = 2 + ((digito - 5) * (16 + 2));
             spriteY = 190;
         }
 
-        DrawTextureRec( rm.texturaHud, (Rectangle){ spriteX, spriteY, 15, 15 }, posicao, WHITE );
+        DrawTextureRec( rm.texturaHud, (Rectangle){ spriteX, spriteY, 18, 25 }, posicao, WHITE );
         
         posicao.x += 16;
     }
@@ -313,7 +313,7 @@ static void desenharFundo( GameWorld *gw ) {
     int repeticoesFundo = larguraMapa / larguraFundo;
     int repeticoesCeu = larguraMapa / larguraCeu;
 
-    int deslocamentoParallax = (int) ( ( gw->camera.target.x / (float) larguraMapa ) * -1200 );
+    int deslocamentoParallax = (int) ( ( gw->camera.target.x / (float) larguraMapa ) * -800 );
     int deslocamentoParallaxCeu = (int) ( ( gw->camera.target.x / (float) larguraMapa ) * -1600 );
 
     for ( int i = 0; i <= repeticoesCeu; i++ ) {

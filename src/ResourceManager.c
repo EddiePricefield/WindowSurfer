@@ -55,7 +55,7 @@ void loadResourcesResourceManager( void ) {
     );
 
     rm.texturaHud = carregarTexturaAlterandoCores(
-        "resources/imagens/hud/hud.png",
+        "resources/imagens/hud/hud2.png",
         (Color[]) {
             { 0, 102, 153, 255 },
         },
@@ -137,7 +137,7 @@ void loadResourcesResourceManager( void ) {
     SetSoundVolume( rm.somHitInimigo, 1.3f );
     SetSoundVolume( rm.somPulo, 0.8f );
     
-    SetMusicVolume( rm.musicaFase01, 0.75f );
+    SetMusicVolume( rm.musicaFase01, 0.0f );
 
 
     SetMasterVolume( 1.0f);

@@ -16,6 +16,7 @@
 #include "Macros.h"
 #include "ResourceManager.h"
 #include "Tipos.h"
+#include "GameWindow.h"
 
 static void desenharQuadroAnimacaoInimigoPonteiro( InimigoPonteiro *inimigo, QuadroAnimacao *qa, Color tonalidade );
 static void desenharQuadroAnimacaoInimigoPonteiroMorrendo( InimigoPonteiro *inimigo, QuadroAnimacao *qa, float escala, Color tonalidade );
@@ -150,7 +151,10 @@ void atualizarInimigoPonteiro( InimigoPonteiro *inimigo, GameWorld *gw, float de
             Vector2 meioInimigo = (Vector2) { inimigo->ret.x + inimigo->ret.width / 2, inimigo->ret.y + inimigo->ret.height / 2 };
             Vector2 meioJogador = (Vector2) { gw->jogador->ret.x + gw->jogador->ret.width / 2, gw->jogador->ret.y + gw->jogador->ret.height / 2 };
 
-            if((meioInimigo.x >= gw->camera.target.x - (GetScreenWidth() / 2) && meioInimigo.x <= gw->camera.target.x + GetScreenWidth() / 2) && (meioInimigo.y >= gw->camera.target.y - (GetScreenHeight() / 2)&& meioInimigo.y <= gw->camera.target.y + GetScreenHeight() / 2)) {
+            if((meioInimigo.x >= gw->camera.target.x - (LARGURA_VIRTUAL / 2) 
+                && meioInimigo.x <= gw->camera.target.x + LARGURA_VIRTUAL / 2)
+                && (meioInimigo.y >= gw->camera.target.y - (ALTURA_VIRTUAL / 2)
+                && meioInimigo.y <= gw->camera.target.y + ALTURA_VIRTUAL / 2)) {
                 inimigo->vistoPeloJogador = true;
             }
 
@@ -169,7 +173,7 @@ void atualizarInimigoPonteiro( InimigoPonteiro *inimigo, GameWorld *gw, float de
                     inimigo->ret.y += 0.02 * (inimigo->posDestino.y - meioInimigo.y);
                 }
                 
-            } else{
+            } else {
                 inimigo->ret.x = inimigo->posDestino.x;
                 inimigo->ret.y = inimigo->posDestino.y;
             }

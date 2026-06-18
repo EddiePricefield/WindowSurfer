@@ -1,6 +1,6 @@
 
 #2               #    #2         #                      3             3         #2   #          3                                                          3
-        3        0      3     0             #      2#                               #2      #                                                             #   2       #
+                 0      3     0             #      2#                               #2      #                                                             #   2       #
  aa             #aaaaaaaaaaaaaaaa#    b           #         2       1     # aaaaa 
 bDF    #aaaa#    DEEEEEEEEEEEEEEF    DEFb                          #aaaa#   DEEEFaaa   0 0 0                                #2                  #      0   1    0    1    0
 DOPEF   DEEF     GHHHHHHHHHHHHHHI    JMEF    1     0 0 0        1   DEEF    GHMEEEEF #aaaaaaa#                                                   aa #aaaaaaaaaaaaaaaaaaaaaaaaaa#   c
@@ -9,7 +9,7 @@ JKKKL   GHHI     JKKKKKKKKKKKKKKL     JKL   #aaaaaaaaaaaaaaaaaaaa#  JKKL    JKGH
                                        3     JKKKKKKKKKKKKKKKKKKL                              DEF                                            aDOL
               d                                                                                JKL    1    1    1       aba                  aDOL
              DEF                                                                                  #aaaaaaaaaaaaaaaa#    DEF    0      0      DOL
-             JKL                                                                    3              DEEEEEEEEEEEEEEF     JKL #aaaaaaaaaaaaa#  JK
+             JKL                                                                    3              DEEEEEEEEEEEEEEF     JKL #aaaaaaaaaaaaa#  JL
                                                                                                    JKKKKKKKKKKKKKKL  3       DEEEEEEEEEEEF
                                                                                                                              JKKKKKKKKKKKL
 
