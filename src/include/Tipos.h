@@ -134,6 +134,15 @@ typedef enum EstadoJogo {
 } EstadoJogo;
 
 /**
+ * @brief Representa o estado do mouse em relação a um botão
+ */
+typedef enum EstadoBotao {
+    BOTAO_PARADO,
+    BOTAO_SELECIONADO,
+    BOTAO_CLICADO,
+} EstadoBotao;
+
+/**
  * @brief Representa um quadro de animação com imagem.
  */
 typedef struct QuadroAnimacao {

@@ -94,6 +94,17 @@ void loadResourcesResourceManager( void ) {
         },
         (Color[]) {
             BLANK,
+        }, 
+        1
+    );
+
+    rm.texturaMenuInicial = carregarTexturaAlterandoCores(
+        "resources/imagens/artes/menu_inicial.png",
+        (Color[]) {
+            { 0, 152, 186, 255 },
+        },
+        (Color[]) {
+            BLANK,
         },
         1
     );
@@ -121,6 +132,7 @@ void loadResourcesResourceManager( void ) {
     SetTextureFilter( rm.texturaHP, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaJanela1, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaJanela, TEXTURE_FILTER_POINT );
+    SetTextureFilter( rm.texturaMenuInicial, TEXTURE_FILTER_POINT );
 
     rm.somColeta = LoadSound( "resources/sons/efeitos/bit.wav" );
     rm.somFrenagem = LoadSound( "resources/sons/efeitos/frenagem.wav" );
@@ -159,6 +171,7 @@ void unloadResourcesResourceManager( void ) {
     UnloadTexture( rm.texturaMorte );
     UnloadTexture( rm.texturaJanela1 );
     UnloadTexture( rm.texturaJanela );
+    UnloadTexture( rm.texturaMenuInicial );
     UnloadSound( rm.somColeta );
     UnloadSound( rm.somFrenagem );
     UnloadSound( rm.somHit );

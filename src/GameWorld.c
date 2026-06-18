@@ -37,10 +37,16 @@ static void desenharNumPequeno( const char *texto, Vector2 posicao );
 static void verificarJogadorMorto( GameWorld *gw );
 
 static void DesenharPopup(Texture2D texture, Rectangle source, Vector2 position, Color tint);
+static void DesenharTitulo(Texture2D texture, Rectangle source, Vector2 position, Color tint);
 
 EstadoJogo estadoJogoAtual = ESTADO_JOGO_MENU_INICIAL;
 EstadoJogo estadoJogoAnterior = ESTADO_JOGO_MAPA1;
+
+EstadoBotao botaoIniciar = BOTAO_SELECIONADO;
+EstadoBotao botaoSair = BOTAO_PARADO;
+
 bool mudarFase = false;
+
 float cronometro = 0;
 
 /**
@@ -70,12 +76,58 @@ void destroyGameWorld( GameWorld *gw ) {
  */
 void updateGameWorld( GameWorld *gw, float delta ) {
 
+    if ( botaoIniciar == BOTAO_CLICADO ){
+
+        cronometro += delta;
+
+        if (cronometro >= 0.1 ){
+            alterarEstadoJogo(ESTADO_JOGO_MAPA1);
+            inicializar(gw);
+            cronometro = 0;
+            botaoIniciar = BOTAO_PARADO;
+        }
+
+    }else if ( botaoSair == BOTAO_CLICADO ){
+
+        cronometro += delta;
+
+        if ( cronometro >= 0.1 ){
+            CloseWindow();
+            cronometro = 0;
+            botaoSair = BOTAO_PARADO;
+        }
+
+    }
+
     switch (estadoJogoAtual){
         case ESTADO_JOGO_MENU_INICIAL:
-            if ( GetKeyPressed() > 0 ) { 
-                alterarEstadoJogo(ESTADO_JOGO_MAPA1);
-                inicializar(gw);
+
+            if (botaoIniciar == BOTAO_SELECIONADO){
+
+                if ( IsKeyPressed( KEY_ENTER ) ) { 
+
+                    botaoIniciar = BOTAO_CLICADO;
+                    
+                } else if ( IsKeyPressed( KEY_DOWN ) || IsKeyPressed( KEY_S ) ){
+                    botaoIniciar = BOTAO_PARADO;
+                    botaoSair = BOTAO_SELECIONADO;
+                }
+
             }
+
+            if (botaoSair == BOTAO_SELECIONADO){
+
+                if ( IsKeyPressed( KEY_ENTER ) ) { 
+
+                    botaoSair = BOTAO_CLICADO;
+                    
+                } else if ( IsKeyPressed( KEY_UP ) || IsKeyPressed( KEY_W ) ){
+                    botaoSair = BOTAO_PARADO;
+                    botaoIniciar = BOTAO_SELECIONADO;
+                }
+
+            }
+            
             break;
         case ESTADO_JOGO_MENU_PAUSA:
             if ( GetKeyPressed() > 0 ) { 
@@ -137,7 +189,35 @@ void drawGameWorld( GameWorld *gw ) {
     switch (estadoJogoAtual){
         case ESTADO_JOGO_MENU_INICIAL:
             ClearBackground(BLACK);
-            DrawText("Pressione qualquer tecla!", 75, 200, 50, WHITE);
+            DrawTexture(rm.texturaMenuInicial, 0, 0, WHITE);
+            DesenharTitulo( rm.texturaMenuInicial, (Rectangle){801, 0, 338, 208}, (Vector2){ 420, 30 }, WHITE );
+
+            DrawTextureRec(rm.texturaMenuInicial, (Rectangle){801, 313, 164, 137}, (Vector2){ 580, 280 }, WHITE);
+
+            switch (botaoIniciar){
+                case BOTAO_PARADO:
+                    DrawTextureRec(rm.texturaMenuInicial, (Rectangle){966, 402, 112, 23}, (Vector2){ 608, 330 }, WHITE);
+                    break;
+                case BOTAO_SELECIONADO:
+                    DrawTextureRec(rm.texturaMenuInicial, (Rectangle){1079, 402, 112, 23}, (Vector2){ 608, 330 }, WHITE);
+                    break;
+                case BOTAO_CLICADO:
+                    DrawTextureRec(rm.texturaMenuInicial, (Rectangle){1192, 402, 112, 23}, (Vector2){ 608, 330 }, WHITE);
+                    break;
+            }
+            switch (botaoSair){
+                Vector2 posBotaoSair = (Vector2){ 608, 430 };
+                case BOTAO_PARADO:
+                    DrawTextureRec(rm.texturaMenuInicial, (Rectangle){966, 426, 112, 23}, (Vector2){ 608, 365 }, WHITE);
+                    break;
+                case BOTAO_SELECIONADO:
+                    DrawTextureRec(rm.texturaMenuInicial, (Rectangle){1079, 426, 112, 23}, (Vector2){ 608, 365 }, WHITE);
+                    break;
+                case BOTAO_CLICADO:
+                    DrawTextureRec(rm.texturaMenuInicial, (Rectangle){1192, 426, 112, 23}, (Vector2){ 608, 365 }, WHITE);
+                    break;
+            }
+
             break;
         case ESTADO_JOGO_DERROTA:
             ClearBackground(BLACK);
@@ -362,6 +442,26 @@ static void DesenharPopup(Texture2D texture, Rectangle source, Vector2 position,
     int numeroAleatorio = GetRandomValue(-1, 1);
 
     DrawTextureRec(texture, source, (Vector2){ position.x + numeroAleatorio, position.y + numeroAleatorio }, tint);
+}
+
+static void DesenharTitulo(Texture2D texture, Rectangle source, Vector2 position, Color tint) {
+    
+    float tempo = GetTime() * 3.0f; 
+    float escala = 1.0f + sinf(tempo) * 0.03f;
+
+    Rectangle dest = {
+        position.x,
+        position.y,
+        source.width * escala,
+        source.height * escala
+    };
+
+    Vector2 origin = { 0.0f, 0.0f };
+
+    dest.x -= (dest.width - source.width) / 2.0f;
+    dest.y -= (dest.height - source.height) / 2.0f;
+
+    DrawTexturePro(texture, source, dest, origin, 0.0f, tint);
 }
 
 static void inicializar( GameWorld *gw ) {
