@@ -139,7 +139,7 @@ void loadResourcesResourceManager( void ) {
     rm.somFrenagem = LoadSound( "resources/sons/efeitos/frenagem.wav" );
     rm.somHit = LoadSound( "resources/sons/efeitos/somHit2.wav" );
     rm.somHitInimigo = LoadSound( "resources/sons/efeitos/hitInimigo.wav" );
-    rm.somMorte = LoadSound( "resources/sons/efeitos/morte.wav" );
+    rm.somMorte = LoadSound( "resources/sons/efeitos/morte.mp3" );
     rm.somPulo = LoadSound( "resources/sons/efeitos/pulo.wav" );
     rm.somClick = LoadSound( "resources/sons/efeitos/click.wav" );
     rm.somGameOver = LoadSound( "resources/sons/efeitos/gameover.mp3" );
