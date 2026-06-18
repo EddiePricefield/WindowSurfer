@@ -142,6 +142,7 @@ void loadResourcesResourceManager( void ) {
     rm.somMorte = LoadSound( "resources/sons/efeitos/morte.wav" );
     rm.somPulo = LoadSound( "resources/sons/efeitos/pulo.wav" );
     rm.somClick = LoadSound( "resources/sons/efeitos/click.wav" );
+    rm.somGameOver = LoadSound( "resources/sons/efeitos/gameover.mp3" );
 
     rm.musicaFase01 = LoadMusicStream( "resources/sons/musicas/piano2.mp3" );
 
@@ -150,8 +151,10 @@ void loadResourcesResourceManager( void ) {
     SetSoundVolume( rm.somHit, 1.2f );
     SetSoundVolume( rm.somHitInimigo, 1.3f );
     SetSoundVolume( rm.somPulo, 0.8f );
+    SetSoundVolume( rm.somClick, 0.7f );
+    SetSoundVolume( rm.somGameOver, 0.7f );
     
-    SetMusicVolume( rm.musicaFase01, 0.75f );
+    SetMusicVolume( rm.musicaFase01, VOLUME_PADRAO_MUSICA );
 
 
     SetMasterVolume( 1.0f);
@@ -181,6 +184,8 @@ void unloadResourcesResourceManager( void ) {
     UnloadSound( rm.somHitInimigo );
     UnloadSound( rm.somMorte );
     UnloadSound( rm.somPulo );
+    UnloadSound( rm.somGameOver );
+    UnloadSound( rm.somClick );
 
     UnloadMusicStream( rm.musicaFase01 );
 

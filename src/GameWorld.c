@@ -46,6 +46,8 @@ EstadoJogo estadoJogoAnterior = ESTADO_JOGO_MAPA1;
 EstadoBotao botaoIniciar = BOTAO_SELECIONADO;
 EstadoBotao botaoSair = BOTAO_PARADO;
 
+float velMusica = 1.0f;
+
 bool mudarFase = false;
 bool iniciarTransicao = false;
 
@@ -146,13 +148,20 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             break;
         case ESTADO_JOGO_DERROTA:
             cronometro += delta;
+            
+            if(cronometro <= 0.1f){
+                SetMusicVolume( rm.musicaFase01, 0.0f );
+                PlaySound( rm.somGameOver );
+            }
 
             if (cronometro >= 3){
                 estadoJogoAnterior = ESTADO_JOGO_DERROTA;
                 alterarEstadoJogo(ESTADO_JOGO_TRANSICAO);
                 inicializar(gw);
                 cronometro = 0;
+                SetMusicVolume( rm.musicaFase01, VOLUME_PADRAO_MUSICA );
             }
+
             break;
         case ESTADO_JOGO_TRANSICAO:
             cronometro += delta;
@@ -205,7 +214,12 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             verificarJogadorMorto( gw );
             break;
     }
-    
+
+    if(IsKeyPressed(KEY_M)){
+        SetMusicVolume(rm.musicaFase01, 0.0f);
+    } else if(IsKeyPressed(KEY_N)){
+        SetMusicVolume(rm.musicaFase01, VOLUME_PADRAO_MUSICA);
+    }
 
 }
 
@@ -559,7 +573,7 @@ static void inicializar( GameWorld *gw ) {
             break;
         case ESTADO_JOGO_MAPA2:
             estadoJogoAnterior = ESTADO_JOGO_MAPA2;
-            gw->mapa = carregarMapa( "resources/mapas/mapaTeste.txt" );
+            gw->mapa = carregarMapa( "resources/mapas/mapa02.txt" );
             gw->jogador = criarJogador( GetScreenWidth() / 2 + 144, calcularAlturaMapa( gw->mapa ) - 1000, 96, 96 );
             break;
     }
