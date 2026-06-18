@@ -87,6 +87,16 @@ void loadResourcesResourceManager( void ) {
         1
     );
 
+    rm.texturaPopUp = carregarTexturaAlterandoCores(
+        "resources/imagens/pop-ups/popups.png",
+        (Color[]) {
+            { 64, 64, 127, 255 },
+        },
+        (Color[]) {
+            BLANK,
+        },
+        1
+    );
 
     rm.texturaTerreno = LoadTexture( "resources/imagens/tiles/terreno.png" );
     rm.texturaCeu = LoadTexture( "resources/imagens/fundo/ceu.png" );
@@ -106,6 +116,8 @@ void loadResourcesResourceManager( void ) {
     SetTextureFilter( rm.texturaFundo, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaCeu, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaHud, TEXTURE_FILTER_POINT );
+    SetTextureFilter( rm.texturaPopUp, TEXTURE_FILTER_POINT );
+    SetTextureFilter( rm.texturaMorte, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaHP, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaJanela1, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaJanela, TEXTURE_FILTER_POINT );
@@ -143,6 +155,8 @@ void unloadResourcesResourceManager( void ) {
     UnloadTexture( rm.texturaCeu );
     UnloadTexture( rm.texturaHud );
     UnloadTexture( rm.texturaHP );
+    UnloadTexture( rm.texturaPopUp );
+    UnloadTexture( rm.texturaMorte );
     UnloadTexture( rm.texturaJanela1 );
     UnloadTexture( rm.texturaJanela );
     UnloadSound( rm.somColeta );

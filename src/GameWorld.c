@@ -36,6 +36,8 @@ static void desenharNumPequeno( const char *texto, Vector2 posicao );
 
 static void verificarJogadorMorto( GameWorld *gw );
 
+static void DesenharPopup(Texture2D texture, Rectangle source, Vector2 position, Color tint);
+
 EstadoJogo estadoJogoAtual = ESTADO_JOGO_MENU_INICIAL;
 EstadoJogo estadoJogoAnterior = ESTADO_JOGO_MAPA1;
 bool mudarFase = false;
@@ -218,6 +220,36 @@ static void desenharHud( GameWorld *gw ) {
 
     // HP //
     int hp = gw->jogador->quantidadeHP;
+
+    // Desenho dos Pop-Ups //
+    Rectangle popUpVisitante = { 0, 0, 167, 144 };
+    Rectangle popUpCaveira = { 168, 27, 207, 117 };
+    Rectangle popUpAviso = { 376, 48, 144, 96 };
+    Rectangle popUpTelaAzul = { 521, 27, 207, 117 };
+
+    if (hp <= 2){
+        DesenharPopup( rm.texturaPopUp, popUpCaveira, (Vector2){ -10, 360 }, WHITE );
+        DesenharPopup( rm.texturaPopUp, popUpAviso, (Vector2){ 700, 10 }, WHITE );
+    }
+
+    if (hp <= 1){
+        DesenharPopup( rm.texturaPopUp, popUpAviso, (Vector2){ 30, 300 }, WHITE );
+        DesenharPopup( rm.texturaPopUp, popUpCaveira, (Vector2){ 620, 70 }, WHITE );
+        DesenharPopup( rm.texturaPopUp, popUpVisitante, (Vector2){ 600, 320 }, WHITE );
+        DesenharPopup( rm.texturaPopUp, popUpTelaAzul, (Vector2){ -100, 20 }, WHITE );
+    }
+
+    if (hp <= 0){
+        DesenharPopup( rm.texturaPopUp, popUpTelaAzul, (Vector2){ 750, 370 }, WHITE );
+        DesenharPopup( rm.texturaPopUp, popUpVisitante, (Vector2){ 600, 320 }, WHITE );
+        DesenharPopup( rm.texturaPopUp, popUpAviso, (Vector2){ 700, 280 }, WHITE );
+        DesenharPopup( rm.texturaPopUp, popUpCaveira, (Vector2){ 480, 360 }, WHITE );
+        DesenharPopup( rm.texturaPopUp, popUpVisitante, (Vector2){ 120, 360 }, WHITE );
+        DesenharPopup( rm.texturaPopUp, popUpTelaAzul, (Vector2){ 550, 30 }, WHITE );
+        DesenharPopup( rm.texturaPopUp, popUpCaveira, (Vector2){ 20, -20 }, WHITE );
+        DesenharPopup( rm.texturaPopUp, popUpAviso, (Vector2){ -70, 100 }, WHITE );
+    }
+
     DrawTextureRec( rm.texturaHP, (Rectangle){ 2, 205 - (48 * (hp + 1) + (3 * hp)), 152, 48 }, (Vector2){ 10, 10 }, (Color){255, 255, 255, 200} );
 
 }
@@ -323,6 +355,13 @@ static void atualizarCamera( GameWorld *gw ) {
         c->target.y = maxY;
     }
 
+}
+
+static void DesenharPopup(Texture2D texture, Rectangle source, Vector2 position, Color tint) {
+
+    int numeroAleatorio = GetRandomValue(-1, 1);
+
+    DrawTextureRec(texture, source, (Vector2){ position.x + numeroAleatorio, position.y + numeroAleatorio }, tint);
 }
 
 static void inicializar( GameWorld *gw ) {
