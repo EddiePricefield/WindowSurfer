@@ -46,7 +46,7 @@ ItemBit *criarItemBit( Rectangle ret, Color cor ) {
         novoItem->animacaoParado.quadros,
         novoItem->animacaoParado.quantidadeQuadros,
         175,             // duração padrão para todos os quadros
-        2, 2,            // início
+        2, 26,            // início
         30, 22,          // dimensões
         2,               // separação
         false,           // de trás para frente

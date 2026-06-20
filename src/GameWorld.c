@@ -46,10 +46,18 @@ EstadoJogo estadoJogoAnterior = ESTADO_JOGO_MAPA1;
 EstadoBotao botaoIniciar = BOTAO_SELECIONADO;
 EstadoBotao botaoSair = BOTAO_PARADO;
 
+EstadoBotao botaoContinuar = BOTAO_SELECIONADO;
+EstadoBotao botaoGuia = BOTAO_PARADO;
+EstadoBotao botaoOpcoes = BOTAO_PARADO;
+EstadoBotao botaoTelaInicial = BOTAO_PARADO;
+
+EstadoBotao botaoVoltarDoGuia = BOTAO_PARADO;
+
 float velMusica = 1.0f;
 
 bool mudarFase = false;
 bool iniciarTransicao = false;
+bool exibirGuia = false;
 
 float fade = 0;
 float tempoFade = 0.5;
@@ -105,10 +113,71 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             botaoSair = BOTAO_PARADO;
         }
 
-    }
+    } else if ( botaoContinuar == BOTAO_CLICADO ){
+
+        cronometro += delta;
+
+        if (cronometro >= 0.1 ){
+            estadoJogoAtual = estadoJogoAnterior;
+            cronometro = 0;
+            botaoContinuar = BOTAO_SELECIONADO;
+        }
+
+    } else if ( botaoGuia == BOTAO_CLICADO ){
+
+        cronometro += delta;
+
+        if (cronometro >= 0.1 ){
+            exibirGuia = true;
+            cronometro = 0;
+            botaoGuia = BOTAO_PARADO;
+            botaoVoltarDoGuia = BOTAO_SELECIONADO;
+        }
+
+    } else if ( botaoOpcoes == BOTAO_CLICADO ){
+
+        cronometro += delta;
+
+        if (cronometro >= 0.1 ){
+            estadoJogoAtual = estadoJogoAnterior;
+            cronometro = 0;
+            botaoOpcoes = BOTAO_SELECIONADO;
+        }
+
+    } else if ( botaoTelaInicial == BOTAO_CLICADO ){
+
+        cronometro += delta;
+
+        if (cronometro >= 0.1 ){
+            estadoJogoAnterior = -1;
+            alterarEstadoJogo(ESTADO_JOGO_TRANSICAO);
+            cronometro = 0;
+            botaoTelaInicial = BOTAO_PARADO;
+            botaoIniciar = BOTAO_SELECIONADO;
+            botaoContinuar = BOTAO_SELECIONADO;
+        }
+
+    } else if ( botaoVoltarDoGuia == BOTAO_CLICADO ){
+
+        cronometro += delta;
+
+        if (cronometro >= 0.1 ){
+            exibirGuia = false;
+            cronometro = 0;
+            botaoGuia = BOTAO_SELECIONADO;
+            botaoVoltarDoGuia = BOTAO_PARADO;
+        }
+
+    } 
 
     switch (estadoJogoAtual){
         case ESTADO_JOGO_MENU_INICIAL:
+
+            if (fade > 0){
+                fade -= 255 / tempoFade * delta;
+            } else{
+                fade = 0;
+            }
 
             if (botaoIniciar == BOTAO_SELECIONADO){
 
@@ -142,9 +211,84 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             
             break;
         case ESTADO_JOGO_MENU_PAUSA:
-            if ( GetKeyPressed() > 0 ) { 
-                estadoJogoAtual = estadoJogoAnterior;
+
+            if (botaoContinuar == BOTAO_SELECIONADO){
+
+                if ( IsKeyPressed( KEY_ENTER ) ) { 
+                    botaoContinuar = BOTAO_CLICADO;
+                    PlaySound(rm.somColeta);
+                } else if ( IsKeyPressed( KEY_UP ) || IsKeyPressed( KEY_W ) ){
+                    PlaySound(rm.somClick);
+                    botaoContinuar = BOTAO_PARADO;
+                    botaoTelaInicial = BOTAO_SELECIONADO;
+                } else if ( IsKeyPressed( KEY_DOWN ) || IsKeyPressed( KEY_S ) ){
+                    PlaySound(rm.somClick);
+                    botaoContinuar = BOTAO_PARADO;
+                    botaoGuia = BOTAO_SELECIONADO;
+                }
+
+            }else if (botaoGuia == BOTAO_SELECIONADO){
+
+                if ( IsKeyPressed( KEY_ENTER ) ) { 
+
+                    botaoGuia = BOTAO_CLICADO;
+                    PlaySound(rm.somColeta);
+                    
+                } else if ( IsKeyPressed( KEY_UP ) || IsKeyPressed( KEY_W ) ){
+                    PlaySound(rm.somClick);
+                    botaoGuia = BOTAO_PARADO;
+                    botaoContinuar = BOTAO_SELECIONADO;
+                } else if ( IsKeyPressed( KEY_DOWN ) || IsKeyPressed( KEY_S ) ){
+                    PlaySound(rm.somClick);
+                    botaoGuia = BOTAO_PARADO;
+                    botaoOpcoes = BOTAO_SELECIONADO;
+                }
+
+            }else if (botaoOpcoes == BOTAO_SELECIONADO){
+
+                if ( IsKeyPressed( KEY_ENTER ) ) { 
+
+                    botaoOpcoes = BOTAO_CLICADO;
+                    PlaySound(rm.somColeta);
+                    
+                } else if ( IsKeyPressed( KEY_UP ) || IsKeyPressed( KEY_W ) ){
+                    PlaySound(rm.somClick);
+                    botaoOpcoes = BOTAO_PARADO;
+                    botaoGuia = BOTAO_SELECIONADO;
+                } else if ( IsKeyPressed( KEY_DOWN ) || IsKeyPressed( KEY_S ) ){
+                    PlaySound(rm.somClick);
+                    botaoOpcoes = BOTAO_PARADO;
+                    botaoTelaInicial = BOTAO_SELECIONADO;
+                }
+
+            }else if (botaoTelaInicial == BOTAO_SELECIONADO){
+
+                if ( IsKeyPressed( KEY_ENTER ) ) { 
+
+                    botaoTelaInicial = BOTAO_CLICADO;
+                    PlaySound(rm.somColeta);
+                    
+                } else if ( IsKeyPressed( KEY_UP ) || IsKeyPressed( KEY_W ) ){
+                    PlaySound(rm.somClick);
+                    botaoTelaInicial = BOTAO_PARADO;
+                    botaoOpcoes = BOTAO_SELECIONADO;
+                } else if ( IsKeyPressed( KEY_DOWN ) || IsKeyPressed( KEY_S ) ){
+                    PlaySound(rm.somClick);
+                    botaoTelaInicial = BOTAO_PARADO;
+                    botaoContinuar = BOTAO_SELECIONADO;
+                }
+
+            }else if (botaoVoltarDoGuia == BOTAO_SELECIONADO){
+
+                if ( IsKeyPressed( KEY_ENTER ) ) { 
+
+                    botaoVoltarDoGuia = BOTAO_CLICADO;
+                    PlaySound(rm.somColeta);
+                    
+                }
+
             }
+
             break;
         case ESTADO_JOGO_DERROTA:
             cronometro += delta;
@@ -175,6 +319,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                 if(estadoJogoAnterior == ESTADO_JOGO_DERROTA){
                     inicializar(gw);
                 }
+
                 alterarEstadoJogo(++estadoJogoAnterior);
             }
             break;
@@ -203,6 +348,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             }
 
             if ( IsKeyPressed( KEY_ENTER ) ) {
+                estadoJogoAnterior = estadoJogoAtual;
                 estadoJogoAtual = ESTADO_JOGO_MENU_PAUSA;
             }
 
@@ -290,8 +436,80 @@ void drawGameWorld( GameWorld *gw ) {
                 DrawFPS( 10, 120 );
 
                 if (estadoJogoAtual == ESTADO_JOGO_MENU_PAUSA){
+
+                    if ( IsMusicStreamPlaying( rm.musicaFase01 ) ) {
+                        PauseMusicStream( rm.musicaFase01 );
+                    }
+
                     DrawRectangle(0, 0, 800, 450, (Color) { 0, 0, 0, 175 });
-                    DrawText("PAUSADO", 275, 200, 50, WHITE);
+                    DrawTextureRec(rm.texturaMenuPausa, (Rectangle){1, 1, 165, 194}, (Vector2){318, 128}, WHITE);
+
+                    switch (botaoContinuar){
+                        case BOTAO_PARADO:
+                            DrawTextureRec(rm.texturaMenuPausa, (Rectangle){167, 1, 112, 23}, (Vector2){ 345, 170 }, WHITE);
+                            break;
+                        case BOTAO_SELECIONADO:
+                            DrawTextureRec(rm.texturaMenuPausa, (Rectangle){280, 1, 112, 23}, (Vector2){ 345, 170 }, WHITE);
+                            break;
+                        case BOTAO_CLICADO:
+                            DrawTextureRec(rm.texturaMenuPausa, (Rectangle){393, 1, 112, 23}, (Vector2){ 345, 170 }, WHITE);
+                            break;
+                    }  
+
+                    switch (botaoGuia){
+                        case BOTAO_PARADO:
+                            DrawTextureRec(rm.texturaMenuPausa, (Rectangle){167, 25, 112, 23}, (Vector2){ 345, 205 }, WHITE);
+                            break;
+                        case BOTAO_SELECIONADO:
+                            DrawTextureRec(rm.texturaMenuPausa, (Rectangle){280, 25, 112, 23}, (Vector2){ 345, 205 }, WHITE);
+                            break;
+                        case BOTAO_CLICADO:
+                            DrawTextureRec(rm.texturaMenuPausa, (Rectangle){393, 25, 112, 23}, (Vector2){ 345, 205 }, WHITE);
+                            break;
+                    } 
+
+                    switch (botaoOpcoes){
+                        case BOTAO_PARADO:
+                            DrawTextureRec(rm.texturaMenuPausa, (Rectangle){167, 49, 112, 23}, (Vector2){ 345, 240 }, WHITE);
+                            break;
+                        case BOTAO_SELECIONADO:
+                            DrawTextureRec(rm.texturaMenuPausa, (Rectangle){280, 49, 112, 23}, (Vector2){ 345, 240 }, WHITE);
+                            break;
+                        case BOTAO_CLICADO:
+                            DrawTextureRec(rm.texturaMenuPausa, (Rectangle){393, 49, 112, 23}, (Vector2){ 345, 240 }, WHITE);
+                            break;
+                    } 
+
+                    switch (botaoTelaInicial){
+                        case BOTAO_PARADO:
+                            DrawTextureRec(rm.texturaMenuPausa, (Rectangle){167, 73, 112, 23}, (Vector2){ 345, 275 }, WHITE);
+                            break;
+                        case BOTAO_SELECIONADO:
+                            DrawTextureRec(rm.texturaMenuPausa, (Rectangle){280, 73, 112, 23}, (Vector2){ 345, 275 }, WHITE);
+                            break;
+                        case BOTAO_CLICADO:
+                            DrawTextureRec(rm.texturaMenuPausa, (Rectangle){393, 73, 112, 23}, (Vector2){ 345, 275 }, WHITE);
+                            break;
+                    } 
+
+                    if (exibirGuia){
+
+                        DrawTextureRec(rm.texturaMenuGuia, (Rectangle){1, 1, 509, 364}, (Vector2){145, 43}, WHITE);
+
+                        switch (botaoVoltarDoGuia){
+                        case BOTAO_PARADO:
+                            DrawTextureRec(rm.texturaMenuGuia, (Rectangle){1, 366, 112, 23}, (Vector2){ 345, 360 }, WHITE);
+                            break;
+                        case BOTAO_SELECIONADO:
+                            DrawTextureRec(rm.texturaMenuGuia, (Rectangle){114, 366, 112, 23}, (Vector2){ 345, 360 }, WHITE);
+                            break;
+                        case BOTAO_CLICADO:
+                            DrawTextureRec(rm.texturaMenuGuia, (Rectangle){227, 366, 112, 23}, (Vector2){ 345, 360 }, WHITE);
+                            break;
+                        } 
+
+                    }
+                    
                 }
 
             }
@@ -567,12 +785,10 @@ static void inicializar( GameWorld *gw ) {
             return;
             break;
         case ESTADO_JOGO_MAPA1:
-            estadoJogoAnterior = ESTADO_JOGO_MAPA1;
             gw->mapa = carregarMapa( "resources/mapas/mapa01.txt" );
             gw->jogador = criarJogador( 144, 144, 96, 96 );
             break;
         case ESTADO_JOGO_MAPA2:
-            estadoJogoAnterior = ESTADO_JOGO_MAPA2;
             gw->mapa = carregarMapa( "resources/mapas/mapa02.txt" );
             gw->jogador = criarJogador( GetScreenWidth() / 2 + 144, calcularAlturaMapa( gw->mapa ) - 1000, 96, 96 );
             break;
