@@ -252,6 +252,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                     PlaySound(rm.somColeta);
                     botaoVoltarDasOpcoes = BOTAO_CLICADO;
                 }else{
+                    PlaySound(rm.somFecharMenu);
                     estadoJogoAtual = estadoJogoAnterior;
                 }
             }
@@ -371,6 +372,9 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                 SetSoundVolume( rm.somPulo, 0.8f * volSons / 10.0f  );
                 SetSoundVolume( rm.somClick, 0.7f * volSons / 10.0f  );
                 SetSoundVolume( rm.somGameOver, 0.7f * volSons / 10.0f  );
+                SetSoundVolume( rm.somAbrirMenu, 0.7f * volSons / 10.0f );
+                SetSoundVolume( rm.somFecharMenu, 1.0f * volSons / 10.0f );
+                SetSoundVolume( rm.somMorte, 1.0f * volSons / 10.0f );
 
                 if ( IsKeyPressed( KEY_RIGHT ) || IsKeyPressed( KEY_D )  ) { 
 
@@ -511,6 +515,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             }
 
             if ( IsKeyPressed( KEY_ESCAPE ) ) {
+                PlaySound( rm.somAbrirMenu );
                 estadoJogoAnterior = estadoJogoAtual;
                 estadoJogoAtual = ESTADO_JOGO_MENU_PAUSA;
             }

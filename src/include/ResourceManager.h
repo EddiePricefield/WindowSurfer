@@ -44,6 +44,9 @@ typedef struct ResourceManager {
     Sound somClick;
     Sound somGameOver;
 
+    Sound somAbrirMenu;
+    Sound somFecharMenu;
+
     Music musicaFase01;
 
 } ResourceManager;

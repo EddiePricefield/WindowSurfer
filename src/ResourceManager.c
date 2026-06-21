@@ -180,6 +180,8 @@ void loadResourcesResourceManager( void ) {
     rm.somPulo = LoadSound( "resources/sons/efeitos/pulo.wav" );
     rm.somClick = LoadSound( "resources/sons/efeitos/click.wav" );
     rm.somGameOver = LoadSound( "resources/sons/efeitos/gameover.mp3" );
+    rm.somAbrirMenu = LoadSound( "resources/sons/efeitos/abrir-menu.wav" );
+    rm.somFecharMenu = LoadSound( "resources/sons/efeitos/fechar-menu.wav" );
 
     rm.musicaFase01 = LoadMusicStream( "resources/sons/musicas/piano2.mp3" );
 
@@ -190,6 +192,8 @@ void loadResourcesResourceManager( void ) {
     SetSoundVolume( rm.somPulo, 0.8f );
     SetSoundVolume( rm.somClick, 0.7f );
     SetSoundVolume( rm.somGameOver, 0.7f );
+    SetSoundVolume( rm.somAbrirMenu, 0.7f );
+    SetSoundVolume( rm.somFecharMenu, 1.0f );
     
     SetMusicVolume( rm.musicaFase01, 0.75f );
 
@@ -226,6 +230,8 @@ void unloadResourcesResourceManager( void ) {
     UnloadSound( rm.somPulo );
     UnloadSound( rm.somGameOver );
     UnloadSound( rm.somClick );
+    UnloadSound( rm.somAbrirMenu );
+    UnloadSound( rm.somFecharMenu );
 
     UnloadMusicStream( rm.musicaFase01 );
 
