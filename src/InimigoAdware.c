@@ -21,7 +21,7 @@ static void desenharQuadroAnimacaoInimigoAdware( InimigoAdware *inimigo, QuadroA
 static void desenharQuadroAnimacaoInimigoAdwareMorrendo( InimigoAdware *inimigo, QuadroAnimacao *qa, float escala, Color tonalidade );
 static Animacao *getAnimacaoAtualInimigoAdware( InimigoAdware *inimigo );
 
-static const bool MOSTRAR_RETANGULOS = false;
+extern bool debug;
 
 /**
  * @brief Cria um novo Inimigo (adware).
@@ -164,7 +164,7 @@ void desenharInimigoAdware( InimigoAdware *inimigo ) {
             desenharQuadroAnimacaoInimigoAdwareMorrendo( inimigo, getQuadroAtualAnimacao( &inimigo->animacaoMorrendo ), 2.0f, WHITE );
         }
 
-        if ( MOSTRAR_RETANGULOS ) {
+        if ( debug ) {
             DrawRectangleRec( inimigo->ret, Fade( inimigo->cor, 0.5f ) );
             DrawRectangleLines( inimigo->ret.x, inimigo->ret.y, inimigo->ret.width, inimigo->ret.height, BLACK );
         }
@@ -198,7 +198,7 @@ static void desenharQuadroAnimacaoInimigoAdware( InimigoAdware *inimigo, QuadroA
             tonalidade
         );
 
-        if ( MOSTRAR_RETANGULOS ) {
+        if ( debug ) {
             float xDesenho = inimigo->olhandoParaDireita
                 ? inimigo->ret.x + inimigo->ret.width - qa->retColisao.x - qa->retColisao.width
                 : inimigo->ret.x + qa->retColisao.x;

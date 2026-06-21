@@ -191,7 +191,7 @@ void loadResourcesResourceManager( void ) {
     SetSoundVolume( rm.somClick, 0.7f );
     SetSoundVolume( rm.somGameOver, 0.7f );
     
-    SetMusicVolume( rm.musicaFase01, VOLUME_PADRAO_MUSICA );
+    SetMusicVolume( rm.musicaFase01, 0.75f );
 
 
     SetMasterVolume( 1.0f);

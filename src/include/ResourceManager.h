@@ -9,8 +9,6 @@
 
 #include "raylib/raylib.h"
 
-#define VOLUME_PADRAO_MUSICA 0.75f
-
 typedef struct ResourceManager {
 
     Texture2D texturaJanela1;

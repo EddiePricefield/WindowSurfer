@@ -61,7 +61,7 @@ EstadoBotao botaoMusica = BOTAO_SELECIONADO;
 EstadoBotao botaoSons = BOTAO_PARADO;
 EstadoBotao botaoTelaCheia = BOTAO_PARADO;
 EstadoBotao botaoDebug = BOTAO_PARADO;
-EstadoBotao BotaoVoltarDasOpcoes = BOTAO_PARADO;
+EstadoBotao botaoVoltarDasOpcoes = BOTAO_PARADO;
 
 float velMusica = 1.0f;
 float volMusica = 10;
@@ -185,7 +185,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             botaoVoltarDoGuia = BOTAO_PARADO;
         }
 
-    } else if ( BotaoVoltarDasOpcoes == BOTAO_CLICADO ){
+    } else if ( botaoVoltarDasOpcoes == BOTAO_CLICADO ){
 
         cronometro += delta;
 
@@ -193,7 +193,11 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             exibirOpcoes = false;
             cronometro = 0;
             botaoOpcoes = BOTAO_SELECIONADO;
-            BotaoVoltarDasOpcoes = BOTAO_PARADO;
+            botaoMusica = BOTAO_PARADO;
+            botaoSons = BOTAO_PARADO;
+            botaoTelaCheia = BOTAO_PARADO;
+            botaoDebug = BOTAO_PARADO;
+            botaoVoltarDasOpcoes = BOTAO_PARADO;
         }
 
     }
@@ -240,6 +244,19 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             break;
         case ESTADO_JOGO_MENU_PAUSA:
 
+            if ( IsKeyPressed ( KEY_ESCAPE ) ){
+                if (exibirGuia){
+                    PlaySound(rm.somColeta);
+                    botaoVoltarDoGuia = BOTAO_CLICADO;
+                }else if (exibirOpcoes){
+                    PlaySound(rm.somColeta);
+                    botaoVoltarDasOpcoes = BOTAO_CLICADO;
+                }else{
+                    estadoJogoAtual = estadoJogoAnterior;
+                }
+            }
+        
+
             if (botaoContinuar == BOTAO_SELECIONADO){
 
                 if ( IsKeyPressed( KEY_ENTER ) ) { 
@@ -253,7 +270,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                     PlaySound(rm.somClick);
                     botaoContinuar = BOTAO_PARADO;
                     botaoGuia = BOTAO_SELECIONADO;
-                }
+                } 
 
             }else if (botaoGuia == BOTAO_SELECIONADO){
 
@@ -317,6 +334,8 @@ void updateGameWorld( GameWorld *gw, float delta ) {
 
             } else if (botaoMusica == BOTAO_SELECIONADO){
 
+                SetMusicVolume( rm.musicaFase01, 0.75f * volMusica / 10.0f );
+
                 if ( IsKeyPressed( KEY_RIGHT ) || IsKeyPressed( KEY_D )  ) { 
 
                     PlaySound(rm.somColeta);
@@ -336,7 +355,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                 } else if ( IsKeyPressed( KEY_UP ) || IsKeyPressed( KEY_W ) ){
                     PlaySound(rm.somClick);
                     botaoMusica = BOTAO_PARADO;
-                    BotaoVoltarDasOpcoes = BOTAO_SELECIONADO;
+                    botaoVoltarDasOpcoes = BOTAO_SELECIONADO;
                 } else if ( IsKeyPressed( KEY_DOWN ) || IsKeyPressed( KEY_S ) ){
                     PlaySound(rm.somClick);
                     botaoMusica = BOTAO_PARADO;
@@ -344,6 +363,14 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                 }
 
             } else if (botaoSons == BOTAO_SELECIONADO){
+
+                SetSoundVolume( rm.somColeta, 0.8f * volSons / 10.0f );
+                SetSoundVolume( rm.somFrenagem, 0.0f * volSons / 10.0f  );
+                SetSoundVolume( rm.somHit, 1.2f * volSons / 10.0f  );
+                SetSoundVolume( rm.somHitInimigo, 1.3f * volSons / 10.0f  );
+                SetSoundVolume( rm.somPulo, 0.8f * volSons / 10.0f  );
+                SetSoundVolume( rm.somClick, 0.7f * volSons / 10.0f  );
+                SetSoundVolume( rm.somGameOver, 0.7f * volSons / 10.0f  );
 
                 if ( IsKeyPressed( KEY_RIGHT ) || IsKeyPressed( KEY_D )  ) { 
 
@@ -376,6 +403,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                 if ( IsKeyPressed( KEY_ENTER ) ) { 
 
                     telaCheia = !telaCheia;
+                    habilitarTelaCheia();
                     PlaySound(rm.somColeta);
                     
                 } else if ( IsKeyPressed( KEY_UP ) || IsKeyPressed( KEY_W ) ){
@@ -402,23 +430,23 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                 } else if ( IsKeyPressed( KEY_DOWN ) || IsKeyPressed( KEY_S ) ){
                     PlaySound(rm.somClick);
                     botaoDebug = BOTAO_PARADO;
-                    BotaoVoltarDasOpcoes = BOTAO_SELECIONADO;
+                    botaoVoltarDasOpcoes = BOTAO_SELECIONADO;
                 }
 
-            } else if (BotaoVoltarDasOpcoes == BOTAO_SELECIONADO){
+            } else if (botaoVoltarDasOpcoes == BOTAO_SELECIONADO){
 
                 if ( IsKeyPressed( KEY_ENTER ) ) { 
 
-                    BotaoVoltarDasOpcoes = BOTAO_CLICADO;
+                    botaoVoltarDasOpcoes = BOTAO_CLICADO;
                     PlaySound(rm.somColeta);
                     
                 } else if ( IsKeyPressed( KEY_UP ) || IsKeyPressed( KEY_W ) ){
                     PlaySound(rm.somClick);
-                    BotaoVoltarDasOpcoes = BOTAO_PARADO;
+                    botaoVoltarDasOpcoes = BOTAO_PARADO;
                     botaoDebug = BOTAO_SELECIONADO;
                 } else if ( IsKeyPressed( KEY_DOWN ) || IsKeyPressed( KEY_S ) ){
                     PlaySound(rm.somClick);
-                    BotaoVoltarDasOpcoes = BOTAO_PARADO;
+                    botaoVoltarDasOpcoes = BOTAO_PARADO;
                     botaoMusica = BOTAO_SELECIONADO;
                 }
 
@@ -438,7 +466,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                 alterarEstadoJogo(ESTADO_JOGO_TRANSICAO);
                 inicializar(gw);
                 cronometro = 0;
-                SetMusicVolume( rm.musicaFase01, VOLUME_PADRAO_MUSICA );
+                SetMusicVolume( rm.musicaFase01, 0.75f * volMusica / 10.0f );
             }
 
             break;
@@ -482,7 +510,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                 printf("Posicao X: %f || Posicao Y: %f\n", gw->jogador->ret.x, gw->jogador->ret.y);
             }
 
-            if ( IsKeyPressed( KEY_ENTER ) ) {
+            if ( IsKeyPressed( KEY_ESCAPE ) ) {
                 estadoJogoAnterior = estadoJogoAtual;
                 estadoJogoAtual = ESTADO_JOGO_MENU_PAUSA;
             }
@@ -499,7 +527,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
     if(IsKeyPressed(KEY_M)){
         SetMusicVolume(rm.musicaFase01, 0.0f);
     } else if(IsKeyPressed(KEY_N)){
-        SetMusicVolume(rm.musicaFase01, VOLUME_PADRAO_MUSICA);
+        SetMusicVolume(rm.musicaFase01, 0.75f * volMusica / 10.0f );
     }
 
 }
@@ -701,7 +729,7 @@ void drawGameWorld( GameWorld *gw ) {
                                 break;
                         }
 
-                        switch (BotaoVoltarDasOpcoes){
+                        switch (botaoVoltarDasOpcoes){
                             case BOTAO_PARADO:
                                 DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){167, 32, 112, 23}, (Vector2){ 344, 280 }, WHITE);
                                 break;

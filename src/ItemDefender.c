@@ -20,7 +20,7 @@
 static void desenharQuadroAnimacaoItemDefender( ItemDefender *item, QuadroAnimacao *qa, Color tonalidade );
 static Animacao *getAnimacaoAtualItemDefender( ItemDefender *item );
 
-static const bool MOSTRAR_RETANGULOS = false;
+extern bool debug;
 
 /**
  * @brief Cria um novo Item (defender).
@@ -115,7 +115,7 @@ void desenharItemDefender( ItemDefender *item ) {
     if ( item->ativo ) {
         QuadroAnimacao *qa = getQuadroAnimacaoAtualItemDefender( item );
         desenharQuadroAnimacaoItemDefender( item, qa, WHITE );
-        if ( MOSTRAR_RETANGULOS ) {
+        if ( debug ) {
             DrawRectangleRec( item->ret, Fade( item->cor, 0.5f ) );
             DrawRectangleLines( item->ret.x, item->ret.y, item->ret.width, item->ret.height, BLACK );
         }
@@ -142,7 +142,7 @@ static void desenharQuadroAnimacaoItemDefender( ItemDefender *item, QuadroAnimac
             tonalidade
         );
 
-        if ( MOSTRAR_RETANGULOS ) {
+        if ( debug ) {
             float xDesenho = item->ret.x + qa->retColisao.x;
             float yDesenho = item->ret.y + qa->retColisao.y;
             DrawRectangle( xDesenho, yDesenho, qa->retColisao.width, qa->retColisao.height, Fade( GREEN, 0.5f ) );

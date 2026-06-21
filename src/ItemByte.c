@@ -20,7 +20,7 @@
 static void desenharQuadroAnimacaoItemByte( ItemByte *item, QuadroAnimacao *qa, Color tonalidade );
 static Animacao *getAnimacaoAtualItemByte( ItemByte *item );
 
-static const bool MOSTRAR_RETANGULOS = false;
+extern bool debug;
 
 /**
  * @brief Cria um novo Item (byte).
@@ -114,7 +114,7 @@ void desenharItemByte( ItemByte *item ) {
     if ( item->ativo ) {
         QuadroAnimacao *qa = getQuadroAnimacaoAtualItemByte( item );
         desenharQuadroAnimacaoItemByte( item, qa, WHITE );
-        if ( MOSTRAR_RETANGULOS ) {
+        if ( debug ) {
             DrawRectangleRec( item->ret, Fade( item->cor, 0.5f ) );
             DrawRectangleLines( item->ret.x, item->ret.y, item->ret.width, item->ret.height, BLACK );
         }
@@ -141,7 +141,7 @@ static void desenharQuadroAnimacaoItemByte( ItemByte *item, QuadroAnimacao *qa, 
             tonalidade
         );
 
-        if ( MOSTRAR_RETANGULOS ) {
+        if ( debug ) {
             float xDesenho = item->ret.x + qa->retColisao.x;
             float yDesenho = item->ret.y + qa->retColisao.y;
             DrawRectangle( xDesenho, yDesenho, qa->retColisao.width, qa->retColisao.height, Fade( GREEN, 0.5f ) );

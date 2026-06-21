@@ -38,7 +38,7 @@ static void resolverColisaoJogadorObstaculosMapaY( Jogador *j, Mapa *mapa );
 static void resolverColisaoJogadorItensMapa( Jogador *j, Mapa *mapa );
 static void resolverColisaoJogadorInimigosMapa( Jogador *j, Mapa *mapa );
 
-static const bool MOSTRAR_RETANGULOS = false;
+extern bool debug;
 
 /**
  * @brief Cria uma instância alocada dinamicamente da struct Jogador.
@@ -440,7 +440,7 @@ void desenharJogador( Jogador *j ) {
         desenharQuadroAnimacaoJogador( j, qa, WHITE );
     }
 
-    if ( MOSTRAR_RETANGULOS ) {
+    if ( debug ) {
         DrawRectangleRec( j->ret, Fade( j->cor, 0.5f ) );
         DrawRectangleLines( j->ret.x, j->ret.y, j->ret.width, j->ret.height, BLACK );
     }
@@ -469,7 +469,7 @@ static void desenharQuadroAnimacaoJogador( Jogador *j, QuadroAnimacao *qa, Color
             tonalidade
         );
 
-        if ( MOSTRAR_RETANGULOS ) {
+        if ( debug ) {
             float xDesenho = j->olhandoParaDireita
                 ? j->ret.x + qa->retColisao.x
                 : j->ret.x + j->ret.width - qa->retColisao.x - qa->retColisao.width;

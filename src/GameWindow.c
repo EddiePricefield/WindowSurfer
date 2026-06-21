@@ -14,6 +14,8 @@
 #include "ResourceManager.h"
 #include "raylib/raylib.h"
 
+bool mudarTamanhoTela = false;
+
 /**
  * @brief Creates a dinamically allocated GameWindow struct instance.
  */
@@ -93,6 +95,7 @@ void initGameWindow( GameWindow *gameWindow ) {
         }
 
         InitWindow( gameWindow->width, gameWindow->height, gameWindow->title );
+        SetExitKey(KEY_NULL);
 
         gameWindow->renderTarget = LoadRenderTexture(
             LARGURA_VIRTUAL,
@@ -154,8 +157,9 @@ void initGameWindow( GameWindow *gameWindow ) {
                 0,
                 WHITE
             );
-            if(IsKeyPressed(KEY_F11)){
+            if(mudarTamanhoTela){
                 ToggleFullscreen();
+                mudarTamanhoTela = false;
             }
             
 
@@ -189,4 +193,11 @@ void destroyGameWindow( GameWindow *gameWindow ) {
         destroyGameWorld( gameWindow->gw );
         free( gameWindow );
     }
+}
+
+/**
+ * @brief Redimensiona a Janela
+ */
+void habilitarTelaCheia(){
+    mudarTamanhoTela = true;
 }
