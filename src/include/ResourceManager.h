@@ -33,6 +33,7 @@ typedef struct ResourceManager {
     Texture2D texturaMenuInicial;
     Texture2D texturaMenuPausa;
     Texture2D texturaMenuGuia;
+    Texture2D texturaMenuOpcoes;
 
     Texture2D texturaTelaMorte;
 

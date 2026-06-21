@@ -43,21 +43,37 @@ static void DesenharTelaMorte(Texture2D texture, Rectangle source, Vector2 posit
 EstadoJogo estadoJogoAtual = ESTADO_JOGO_MENU_INICIAL;
 EstadoJogo estadoJogoAnterior = ESTADO_JOGO_MAPA1;
 
+// Menu Inicial //
 EstadoBotao botaoIniciar = BOTAO_SELECIONADO;
 EstadoBotao botaoSair = BOTAO_PARADO;
 
+// Menu de Pausa //
 EstadoBotao botaoContinuar = BOTAO_SELECIONADO;
 EstadoBotao botaoGuia = BOTAO_PARADO;
 EstadoBotao botaoOpcoes = BOTAO_PARADO;
 EstadoBotao botaoTelaInicial = BOTAO_PARADO;
 
+// Menu de Guia //
 EstadoBotao botaoVoltarDoGuia = BOTAO_PARADO;
 
+// Menu de Opções //
+EstadoBotao botaoMusica = BOTAO_SELECIONADO;
+EstadoBotao botaoSons = BOTAO_PARADO;
+EstadoBotao botaoTelaCheia = BOTAO_PARADO;
+EstadoBotao botaoDebug = BOTAO_PARADO;
+EstadoBotao BotaoVoltarDasOpcoes = BOTAO_PARADO;
+
 float velMusica = 1.0f;
+float volMusica = 10;
+float volSons = 10;
 
 bool mudarFase = false;
 bool iniciarTransicao = false;
+
 bool exibirGuia = false;
+bool exibirOpcoes = false;
+bool telaCheia = false;
+bool debug = false;
 
 float fade = 0;
 float tempoFade = 0.5;
@@ -139,9 +155,10 @@ void updateGameWorld( GameWorld *gw, float delta ) {
         cronometro += delta;
 
         if (cronometro >= 0.1 ){
-            estadoJogoAtual = estadoJogoAnterior;
+            exibirOpcoes = true;
             cronometro = 0;
-            botaoOpcoes = BOTAO_SELECIONADO;
+            botaoOpcoes = BOTAO_PARADO;
+            botaoMusica = BOTAO_SELECIONADO;
         }
 
     } else if ( botaoTelaInicial == BOTAO_CLICADO ){
@@ -168,7 +185,18 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             botaoVoltarDoGuia = BOTAO_PARADO;
         }
 
-    } 
+    } else if ( BotaoVoltarDasOpcoes == BOTAO_CLICADO ){
+
+        cronometro += delta;
+
+        if (cronometro >= 0.1 ){
+            exibirOpcoes = false;
+            cronometro = 0;
+            botaoOpcoes = BOTAO_SELECIONADO;
+            BotaoVoltarDasOpcoes = BOTAO_PARADO;
+        }
+
+    }
 
     switch (estadoJogoAtual){
         case ESTADO_JOGO_MENU_INICIAL:
@@ -285,6 +313,113 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                     botaoVoltarDoGuia = BOTAO_CLICADO;
                     PlaySound(rm.somColeta);
                     
+                }
+
+            } else if (botaoMusica == BOTAO_SELECIONADO){
+
+                if ( IsKeyPressed( KEY_RIGHT ) || IsKeyPressed( KEY_D )  ) { 
+
+                    PlaySound(rm.somColeta);
+
+                    if (volMusica < 10){
+                        volMusica++;
+                    }
+                    
+                } else if ( IsKeyPressed( KEY_LEFT ) || IsKeyPressed( KEY_A ) ){
+
+                    PlaySound(rm.somColeta);
+
+                    if (volMusica > 0){
+                        volMusica--;
+                    }
+
+                } else if ( IsKeyPressed( KEY_UP ) || IsKeyPressed( KEY_W ) ){
+                    PlaySound(rm.somClick);
+                    botaoMusica = BOTAO_PARADO;
+                    BotaoVoltarDasOpcoes = BOTAO_SELECIONADO;
+                } else if ( IsKeyPressed( KEY_DOWN ) || IsKeyPressed( KEY_S ) ){
+                    PlaySound(rm.somClick);
+                    botaoMusica = BOTAO_PARADO;
+                    botaoSons = BOTAO_SELECIONADO;
+                }
+
+            } else if (botaoSons == BOTAO_SELECIONADO){
+
+                if ( IsKeyPressed( KEY_RIGHT ) || IsKeyPressed( KEY_D )  ) { 
+
+                    PlaySound(rm.somColeta);
+
+                    if (volSons < 10){
+                        volSons++;
+                    }
+                    
+                } else if ( IsKeyPressed( KEY_LEFT ) || IsKeyPressed( KEY_A ) ){
+                    
+                    PlaySound(rm.somColeta);
+
+                    if (volSons > 0){
+                        volSons--;
+                    }
+
+                } else if ( IsKeyPressed( KEY_UP ) || IsKeyPressed( KEY_W ) ){
+                    PlaySound(rm.somClick);
+                    botaoSons = BOTAO_PARADO;
+                    botaoMusica = BOTAO_SELECIONADO;
+                } else if ( IsKeyPressed( KEY_DOWN ) || IsKeyPressed( KEY_S ) ){
+                    PlaySound(rm.somClick);
+                    botaoSons = BOTAO_PARADO;
+                    botaoTelaCheia = BOTAO_SELECIONADO;
+                }
+
+            } else if (botaoTelaCheia == BOTAO_SELECIONADO){
+
+                if ( IsKeyPressed( KEY_ENTER ) ) { 
+
+                    telaCheia = !telaCheia;
+                    PlaySound(rm.somColeta);
+                    
+                } else if ( IsKeyPressed( KEY_UP ) || IsKeyPressed( KEY_W ) ){
+                    PlaySound(rm.somClick);
+                    botaoTelaCheia = BOTAO_PARADO;
+                    botaoSons = BOTAO_SELECIONADO;
+                } else if ( IsKeyPressed( KEY_DOWN ) || IsKeyPressed( KEY_S ) ){
+                    PlaySound(rm.somClick);
+                    botaoTelaCheia = BOTAO_PARADO;
+                    botaoDebug = BOTAO_SELECIONADO;
+                }
+
+            } else if (botaoDebug == BOTAO_SELECIONADO){
+
+                if ( IsKeyPressed( KEY_ENTER ) ) { 
+
+                    debug = !debug;
+                    PlaySound(rm.somColeta);
+                    
+                } else if ( IsKeyPressed( KEY_UP ) || IsKeyPressed( KEY_W ) ){
+                    PlaySound(rm.somClick);
+                    botaoDebug = BOTAO_PARADO;
+                    botaoTelaCheia = BOTAO_SELECIONADO;
+                } else if ( IsKeyPressed( KEY_DOWN ) || IsKeyPressed( KEY_S ) ){
+                    PlaySound(rm.somClick);
+                    botaoDebug = BOTAO_PARADO;
+                    BotaoVoltarDasOpcoes = BOTAO_SELECIONADO;
+                }
+
+            } else if (BotaoVoltarDasOpcoes == BOTAO_SELECIONADO){
+
+                if ( IsKeyPressed( KEY_ENTER ) ) { 
+
+                    BotaoVoltarDasOpcoes = BOTAO_CLICADO;
+                    PlaySound(rm.somColeta);
+                    
+                } else if ( IsKeyPressed( KEY_UP ) || IsKeyPressed( KEY_W ) ){
+                    PlaySound(rm.somClick);
+                    BotaoVoltarDasOpcoes = BOTAO_PARADO;
+                    botaoDebug = BOTAO_SELECIONADO;
+                } else if ( IsKeyPressed( KEY_DOWN ) || IsKeyPressed( KEY_S ) ){
+                    PlaySound(rm.somClick);
+                    BotaoVoltarDasOpcoes = BOTAO_PARADO;
+                    botaoMusica = BOTAO_SELECIONADO;
                 }
 
             }
@@ -497,16 +632,87 @@ void drawGameWorld( GameWorld *gw ) {
                         DrawTextureRec(rm.texturaMenuGuia, (Rectangle){1, 1, 509, 364}, (Vector2){145, 43}, WHITE);
 
                         switch (botaoVoltarDoGuia){
-                        case BOTAO_PARADO:
-                            DrawTextureRec(rm.texturaMenuGuia, (Rectangle){1, 366, 112, 23}, (Vector2){ 345, 360 }, WHITE);
-                            break;
-                        case BOTAO_SELECIONADO:
-                            DrawTextureRec(rm.texturaMenuGuia, (Rectangle){114, 366, 112, 23}, (Vector2){ 345, 360 }, WHITE);
-                            break;
-                        case BOTAO_CLICADO:
-                            DrawTextureRec(rm.texturaMenuGuia, (Rectangle){227, 366, 112, 23}, (Vector2){ 345, 360 }, WHITE);
-                            break;
+                            case BOTAO_PARADO:
+                                DrawTextureRec(rm.texturaMenuGuia, (Rectangle){1, 366, 112, 23}, (Vector2){ 345, 360 }, WHITE);
+                                break;
+                            case BOTAO_SELECIONADO:
+                                DrawTextureRec(rm.texturaMenuGuia, (Rectangle){114, 366, 112, 23}, (Vector2){ 345, 360 }, WHITE);
+                                break;
+                            case BOTAO_CLICADO:
+                                DrawTextureRec(rm.texturaMenuGuia, (Rectangle){227, 366, 112, 23}, (Vector2){ 345, 360 }, WHITE);
+                                break;
                         } 
+
+                    }
+
+                    if (exibirOpcoes){
+
+                        DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){1, 1, 165, 194}, (Vector2){318, 128}, WHITE);
+
+                        switch (botaoMusica){
+                            case BOTAO_PARADO:
+                                DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){168, 2, 7, 13}, (Vector2){ 389 + (7 * volMusica), 167 }, WHITE);
+                                break;
+                            case BOTAO_SELECIONADO:
+                                DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){168, 17, 7, 13}, (Vector2){ 389 + (7 * volMusica), 167 }, WHITE);
+                                break;
+                        }
+
+                        switch (botaoSons){
+                            case BOTAO_PARADO:
+                                DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){168, 2, 7, 13}, (Vector2){ 389 + (7 * volSons), 188 }, WHITE);
+                                break;
+                            case BOTAO_SELECIONADO:
+                                DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){168, 17, 7, 13}, (Vector2){ 389 + (7 * volSons), 188 }, WHITE);
+                                break;
+                        }
+
+                        switch (botaoTelaCheia){
+                            case BOTAO_PARADO:
+                                if (telaCheia){
+                                    DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){226, 1, 25, 25}, (Vector2){ 438, 211 }, WHITE);
+                                }else{
+                                    DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){176, 1, 25, 25}, (Vector2){ 438, 211 }, WHITE);
+                                }
+                                break;
+                            case BOTAO_SELECIONADO:
+                                if (telaCheia){
+                                    DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){251, 1, 25, 25}, (Vector2){ 438, 211 }, WHITE);
+                                }else{
+                                    DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){201, 1, 25, 25}, (Vector2){ 438, 211 }, WHITE);
+                                }
+                                break;
+                        }
+
+                        switch (botaoDebug){
+                            case BOTAO_PARADO:
+                                if (debug){
+                                    DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){226, 1, 25, 25}, (Vector2){ 438, 243 }, WHITE);
+                                }else{
+                                    DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){176, 1, 25, 25}, (Vector2){ 438, 243 }, WHITE);
+                                }
+                                break;
+                            case BOTAO_SELECIONADO:
+                                if (debug){
+                                    DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){251, 1, 25, 25}, (Vector2){ 438, 243 }, WHITE);
+                                }else{
+                                    DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){201, 1, 25, 25}, (Vector2){ 438, 243 }, WHITE);
+                                }
+                                break;
+                        }
+
+                        switch (BotaoVoltarDasOpcoes){
+                            case BOTAO_PARADO:
+                                DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){167, 32, 112, 23}, (Vector2){ 344, 280 }, WHITE);
+                                break;
+                            case BOTAO_SELECIONADO:
+                                DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){280, 32, 112, 23}, (Vector2){ 344, 280 }, WHITE);
+                                break;
+                            case BOTAO_CLICADO:
+                                DrawTextureRec(rm.texturaMenuOpcoes, (Rectangle){393, 32, 112, 23}, (Vector2){ 344, 280 }, WHITE);
+                                break;
+                        } 
+
 
                     }
                     

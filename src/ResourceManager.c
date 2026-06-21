@@ -131,6 +131,17 @@ void loadResourcesResourceManager( void ) {
         1
     );
 
+    rm.texturaMenuOpcoes = carregarTexturaAlterandoCores(
+        "resources/imagens/artes/menu_opcoes.png",
+        (Color[]) {
+            { 0, 152, 186, 255 },
+        },
+        (Color[]) {
+            BLANK,
+        },
+        1
+    );
+
     rm.texturaTerreno = LoadTexture( "resources/imagens/tiles/terreno.png" );
     rm.texturaCeu = LoadTexture( "resources/imagens/fundo/ceu.png" );
 
@@ -158,6 +169,7 @@ void loadResourcesResourceManager( void ) {
     SetTextureFilter( rm.texturaMenuInicial, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaMenuPausa, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaMenuGuia, TEXTURE_FILTER_POINT );
+    SetTextureFilter( rm.texturaMenuOpcoes, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaTelaMorte, TEXTURE_FILTER_POINT );
 
     rm.somColeta = LoadSound( "resources/sons/efeitos/bit.wav" );
@@ -204,6 +216,7 @@ void unloadResourcesResourceManager( void ) {
     UnloadTexture( rm.texturaMenuInicial );
     UnloadTexture( rm.texturaMenuPausa );
     UnloadTexture( rm.texturaMenuGuia );
+    UnloadTexture( rm.texturaMenuOpcoes );
     UnloadTexture( rm.texturaTelaMorte );
     UnloadSound( rm.somColeta );
     UnloadSound( rm.somFrenagem );
