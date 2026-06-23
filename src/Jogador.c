@@ -27,6 +27,7 @@
 #include "ResourceManager.h"
 #include "Tipos.h"
 #include "Mapa.h"
+#include "GameWorld.h"
 
 static void desenharQuadroAnimacaoJogador( Jogador *j, QuadroAnimacao *qa, Color tonalidade );
 static QuadroAnimacao *getQuadroAnimacaoAtualJogador( Jogador *j );
@@ -761,6 +762,7 @@ static void resolverColisaoJogadorInimigosMapa( Jogador *j, Mapa *mapa ) {
                     if ( j->quantidadeHP > 0 ) {
                         j->quantidadeHP--;
                         PlaySound( rm.somHit );
+                        ativarCameraShake(DURACAO_SHAKE, INTENSIDADE_SHAKE);
                     } else {
                         j->morreu = true;
                         PlaySound( rm.somMorte );
@@ -808,6 +810,7 @@ static void resolverColisaoJogadorInimigosMapa( Jogador *j, Mapa *mapa ) {
                     if ( j->quantidadeHP > 0 ) {
                         j->quantidadeHP--;
                         PlaySound( rm.somHit );
+                        ativarCameraShake(DURACAO_SHAKE, INTENSIDADE_SHAKE);
                     } else {
                         j->morreu = true;
                         PlaySound( rm.somMorte );
@@ -855,6 +858,7 @@ static void resolverColisaoJogadorInimigosMapa( Jogador *j, Mapa *mapa ) {
                     if ( j->quantidadeHP > 0 ) {
                         j->quantidadeHP--;
                         PlaySound( rm.somHit );
+                        ativarCameraShake(DURACAO_SHAKE, INTENSIDADE_SHAKE);
                     } else {
                         j->morreu = true;
                         PlaySound( rm.somMorte );
@@ -901,6 +905,7 @@ static void resolverColisaoJogadorInimigosMapa( Jogador *j, Mapa *mapa ) {
                     if ( j->quantidadeHP > 0 ) {
                         j->quantidadeHP--;
                         PlaySound( rm.somHit );
+                        ativarCameraShake(DURACAO_SHAKE, INTENSIDADE_SHAKE);
                     } else {
                         j->morreu = true;
                         PlaySound( rm.somMorte );

@@ -191,9 +191,9 @@ void loadResourcesResourceManager( void ) {
     SetSoundVolume( rm.somHitInimigo, 1.3f );
     SetSoundVolume( rm.somPulo, 0.8f );
     SetSoundVolume( rm.somClick, 0.7f );
-    SetSoundVolume( rm.somGameOver, 0.7f );
-    SetSoundVolume( rm.somAbrirMenu, 0.7f );
-    SetSoundVolume( rm.somFecharMenu, 1.0f );
+    SetSoundVolume( rm.somGameOver, 0.9f );
+    SetSoundVolume( rm.somAbrirMenu, 0.9f );
+    SetSoundVolume( rm.somFecharMenu, 1.5f );
     
     SetMusicVolume( rm.musicaFase01, 0.75f );
 

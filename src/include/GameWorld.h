@@ -9,6 +9,9 @@
 
 #include "Tipos.h"
 
+#define DURACAO_SHAKE 0.2f
+#define INTENSIDADE_SHAKE 1.5f
+
 /**
  * @brief Cria uma instância alocada dinamicamente da struct GameWorld.
  */
@@ -33,3 +36,5 @@ void drawGameWorld( GameWorld *gw );
  * @brief Alterar o estado do jogo.
  */
 void alterarEstadoJogo( EstadoJogo novoEstado );
+
+void ativarCameraShake(float duracao, float intensidade);

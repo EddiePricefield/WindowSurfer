@@ -81,6 +81,9 @@ float tempoFade = 0.5;
 float cronometro = 0;
 float tempoInicioAnimacaoMorte = 0.0f;
 
+static float cameraShakeDuracao    = 0.0f;
+static float cameraShakeIntensidade = 0.0f;
+
 /**
  * @brief Cria uma instância alocada dinamicamente da struct GameWorld.
  */
@@ -937,13 +940,20 @@ static void atualizarCamera( GameWorld *gw ) {
         c->target.y = maxY;
     }
 
+    if (cameraShakeDuracao > 0.0f) {
+        c->offset.x += GetRandomValue(-1, 1) * cameraShakeIntensidade;
+        c->offset.y += GetRandomValue(-1, 1) * cameraShakeIntensidade;
+        cameraShakeDuracao -= GetFrameTime(); 
+    }
+
 }
 
 static void DesenharPopup(Texture2D texture, Rectangle source, Vector2 position, Color tint) {
 
-    int numeroAleatorio = GetRandomValue(-1, 1);
+    int shakeX = GetRandomValue(-1, 1);
+    int shakeY = GetRandomValue(-1, 1);
 
-    DrawTextureRec(texture, source, (Vector2){ position.x + numeroAleatorio, position.y + numeroAleatorio }, tint);
+    DrawTextureRec(texture, source, (Vector2){ position.x + shakeX, position.y + shakeY }, tint);
 }
 
 static void DesenharTelaMorte(Texture2D texture, Rectangle source, Vector2 position, Color tint) {
@@ -1048,6 +1058,11 @@ static void inicializar( GameWorld *gw ) {
     }
     
 
+}
+
+void ativarCameraShake(float duracao, float intensidade) {
+    cameraShakeDuracao    = duracao;
+    cameraShakeIntensidade = intensidade;
 }
 
 static void reiniciar( GameWorld *gw ) {
