@@ -1041,6 +1041,10 @@ static void inicializar( GameWorld *gw ) {
             gw->mapa = carregarMapa( "resources/mapas/mapa02.txt" );
             gw->jogador = criarJogador( GetScreenWidth() / 2 + 144, calcularAlturaMapa( gw->mapa ) - 1000, 96, 96 );
             break;
+        case ESTADO_JOGO_MAPA3:
+            gw->mapa = carregarMapa( "resources/mapas/mapa03.txt" );
+            gw->jogador = criarJogador( GetScreenWidth() / 2 + 144, calcularAlturaMapa( gw->mapa ) - 1000, 96, 96 );
+            break;
     }
     
 
@@ -1066,7 +1070,6 @@ void ativarCameraShake(float duracao, float intensidade) {
 }
 
 static void reiniciar( GameWorld *gw ) {
-
 
     if( gw->mapa != NULL ){
         destruirMapa( gw->mapa );

@@ -17,6 +17,7 @@
 #include "InimigoSpyware.h"
 #include "InimigoAdware.h"
 #include "InimigoPonteiro.h"
+#include "InimigoBoss.h"
 #include "Item.h"
 #include "ItemBit.h"
 #include "ItemByte.h"
@@ -309,6 +310,23 @@ Mapa *carregarMapa(const char *caminhoArquivo)
                                 .y = novoMapa->dimensaoPadraoElementos * linhaAtual - 21,
                                 .width = 35,
                                 .height = 41},
+                            YELLOW);
+
+                        el->objeto = inimigo;
+                        el->tipo = TIPO_ELEMENTO_MAPA_INIMIGO;
+
+                        break;
+                    
+                    case '4':
+
+                        inimigo = criarInimigo(TIPO_INIMIGO_BOSS);
+
+                        inimigo->objeto = criarInimigoBoss(
+                            (Rectangle){
+                                .x = novoMapa->dimensaoPadraoElementos * colunaAtual,
+                                .y = novoMapa->dimensaoPadraoElementos * linhaAtual - 21,
+                                .width = 80,
+                                .height = 60},
                             YELLOW);
 
                         el->objeto = inimigo;

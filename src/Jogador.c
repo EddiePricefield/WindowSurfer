@@ -17,6 +17,7 @@
 #include "InimigoSpyware.h"
 #include "InimigoAdware.h"
 #include "InimigoPonteiro.h"
+#include "InimigoBoss.h"
 #include "Item.h"
 #include "ItemBit.h"
 #include "ItemByte.h"
@@ -899,6 +900,53 @@ static void resolverColisaoJogadorInimigosMapa( Jogador *j, Mapa *mapa ) {
                 if ( j->vel.y > 0 && ((retColCalculado.y + retColCalculado.height) <= (retColInimigoCalculado.y + retColInimigoCalculado.height * 0.75)) && j->estado >= ESTADO_JOGADOR_PULANDO && j->estado <= ESTADO_JOGADOR_PULANDO_CORRENDO ) {
                     j->vel.y = j->velPulo;
                     ponteiro->estado = ESTADO_INIMIGO_PONTEIRO_MORRENDO;
+                    j->scoreTotal += 100;
+                    PlaySound( rm.somHitInimigo );
+                } else if ( !j->invulneravel ) {
+                    if ( j->quantidadeHP > 0 ) {
+                        j->quantidadeHP--;
+                        PlaySound( rm.somHit );
+                        ativarCameraShake(DURACAO_SHAKE, INTENSIDADE_SHAKE);
+                    } else {
+                        j->morreu = true;
+                        PlaySound( rm.somMorte );
+                    }
+                    j->invulneravel = true;
+                }
+
+                return; // um inimigo de cada vez!
+
+            }
+        } else if ( inimigo->tipo == TIPO_INIMIGO_BOSS ) {
+
+            InimigoBoss *boss = (InimigoBoss*) inimigo->objeto;
+
+            if ( !boss->ativo || boss->estado == ESTADO_INIMIGO_BOSS_MORRENDO ) {
+                el = el->proximo;
+                continue;
+            }
+
+            qaInimigo = getQuadroAnimacaoAtualInimigoBoss( boss );
+            olhandoParaDireita = &boss->olhandoParaDireita;
+            ret = &boss->ret;
+
+            float deslocamentoX = *olhandoParaDireita
+                ? ret->width - qaInimigo->retColisao.x - qaInimigo->retColisao.width
+                : qaInimigo->retColisao.x;
+            float deslocamentoY = qaInimigo->retColisao.y;
+
+            Rectangle retColInimigoCalculado = {
+                ret->x + deslocamentoX,
+                ret->y + deslocamentoY,
+                qaInimigo->retColisao.width,
+                qaInimigo->retColisao.height
+            };
+
+            if ( CheckCollisionRecs( retColCalculado, retColInimigoCalculado ) ) {
+
+                if ( j->vel.y > 0 && ((retColCalculado.y + retColCalculado.height) <= (retColInimigoCalculado.y + retColInimigoCalculado.height * 0.75)) && j->estado >= ESTADO_JOGADOR_PULANDO && j->estado <= ESTADO_JOGADOR_PULANDO_CORRENDO ) {
+                    j->vel.y = j->velPulo;
+                    boss->estado = ESTADO_INIMIGO_BOSS_MORRENDO;
                     j->scoreTotal += 100;
                     PlaySound( rm.somHitInimigo );
                 } else if ( !j->invulneravel ) {
