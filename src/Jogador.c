@@ -41,6 +41,7 @@ static void resolverColisaoJogadorItensMapa( Jogador *j, Mapa *mapa );
 static void resolverColisaoJogadorInimigosMapa( Jogador *j, Mapa *mapa );
 
 extern bool debug;
+bool emCutscene = false;
 
 /**
  * @brief Cria uma instância alocada dinamicamente da struct Jogador.
@@ -276,9 +277,9 @@ void entradaJogador( Jogador *j, float delta ) {
 
     EstadoJogador estadoAnterior = j->estado;
 
-    bool direitaDown  = IsKeyDown( KEY_RIGHT )     || ( IsGamepadAvailable( 0 ) && IsGamepadButtonDown( 0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT ) );
-    bool esquerdaDown = IsKeyDown( KEY_LEFT )      || ( IsGamepadAvailable( 0 ) && IsGamepadButtonDown( 0, GAMEPAD_BUTTON_LEFT_FACE_LEFT ) );
-    bool puloPressed  = IsKeyPressed( KEY_SPACE )  || ( IsGamepadAvailable( 0 ) && IsGamepadButtonDown( 0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN ) );
+    bool direitaDown  = IsKeyDown( KEY_RIGHT ) && !emCutscene     || ( IsGamepadAvailable( 0 ) && IsGamepadButtonDown( 0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT ) && !emCutscene || IsKeyDown( KEY_D ) && !emCutscene);
+    bool esquerdaDown = IsKeyDown( KEY_LEFT ) && !emCutscene      || ( IsGamepadAvailable( 0 ) && IsGamepadButtonDown( 0, GAMEPAD_BUTTON_LEFT_FACE_LEFT ) && !emCutscene  || IsKeyDown( KEY_A ) && !emCutscene);
+    bool puloPressed  = IsKeyPressed( KEY_SPACE ) && !emCutscene  || ( IsGamepadAvailable( 0 ) && IsGamepadButtonDown( 0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN ) && !emCutscene );
 
     if ( direitaDown ) {
         if ( j->vel.x < 0 ) {

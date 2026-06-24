@@ -1034,8 +1034,8 @@ static void inicializar( GameWorld *gw ) {
             return;
             break;
         case ESTADO_JOGO_MAPA1:
-            gw->mapa = carregarMapa( "resources/mapas/mapa01.txt" );
-            gw->jogador = criarJogador( 144, 144, 96, 96 );
+            gw->mapa = carregarMapa( "resources/mapas/mapa03.txt" );
+            gw->jogador = criarJogador( 50 + 144, 144, 96, 96 );
             break;
         case ESTADO_JOGO_MAPA2:
             gw->mapa = carregarMapa( "resources/mapas/mapa02.txt" );

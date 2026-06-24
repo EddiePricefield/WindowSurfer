@@ -9,6 +9,7 @@
 #include <stdlib.h>
 
 #include "raylib/raylib.h"
+#include "math.h"
 
 #include "Animacao.h"
 #include "Inimigo.h"
@@ -21,7 +22,11 @@ static void desenharQuadroAnimacaoInimigoBoss( InimigoBoss *inimigo, QuadroAnima
 static void desenharQuadroAnimacaoInimigoBossMorrendo( InimigoBoss *inimigo, QuadroAnimacao *qa, float escala, Color tonalidade );
 static Animacao *getAnimacaoAtualInimigoBoss( InimigoBoss *inimigo );
 
+float tempoCutscene = 0;
+bool bossCutscene;
+
 extern bool debug;
+extern bool emCutscene;
 
 /**
  * @brief Cria um novo Inimigo (boss).
@@ -34,10 +39,11 @@ InimigoBoss *criarInimigoBoss( Rectangle ret, Color cor ) {
     novoInimigo->vel = (Vector2) { 0 };
     novoInimigo->cor = cor;
 
-    novoInimigo->velAndando = 100;
-    novoInimigo->velMaxQueda = 600;
+    novoInimigo->velAndando = 300;
+    novoInimigo->posYInicial = ret.y;
+    novoInimigo->tempoOnda = 0;
 
-    novoInimigo->estado = ESTADO_INIMIGO_BOSS_ANDANDO;
+    novoInimigo->estado = ESTADO_INIMIGO_BOSS_INICIO;
     novoInimigo->ativo = true;
     novoInimigo->olhandoParaDireita = false;
 
@@ -59,7 +65,27 @@ InimigoBoss *criarInimigoBoss( Rectangle ret, Color cor ) {
         2,               // separação
         false,           // de trás para frente
         (Rectangle) {    // retângulo de colisão padrão para cada quadro
-            7, 10, 66, 45
+            -1000, -1000, 1000, 2000
+        }
+    );
+
+    novoInimigo->animacaoInicio.quantidadeQuadros = 8;
+    novoInimigo->animacaoInicio.quadroAtual = 0;
+    novoInimigo->animacaoInicio.contadorTempoQuadro = 0.0f;
+    novoInimigo->animacaoInicio.pararNoUltimoQuadro = false;
+    novoInimigo->animacaoInicio.executarUmaVez = false;
+    novoInimigo->animacaoInicio.finalizada = false;
+    criarQuadrosAnimacao( &novoInimigo->animacaoInicio, novoInimigo->animacaoInicio.quantidadeQuadros );
+    inicializarQuadrosAnimacao( 
+        novoInimigo->animacaoInicio.quadros,
+        novoInimigo->animacaoInicio.quantidadeQuadros,
+        250,             // duração padrão para todos os quadros
+        2, 66,           // início
+        36, 30,          // dimensões
+        2,               // separação
+        false,           // de trás para frente
+        (Rectangle) {    // retângulo de colisão padrão para cada quadro
+            -1000, -1000, 1000, 2000
         }
     );
 
@@ -83,6 +109,7 @@ InimigoBoss *criarInimigoBoss( Rectangle ret, Color cor ) {
 
     novoInimigo->animacoes[ESTADO_INIMIGO_BOSS_ANDANDO] = &novoInimigo->animacaoAndando; quantidadeAnimacoes++;
     novoInimigo->animacoes[ESTADO_INIMIGO_BOSS_MORRENDO] = &novoInimigo->animacaoMorrendo; quantidadeAnimacoes++;
+    novoInimigo->animacoes[ESTADO_INIMIGO_BOSS_INICIO] = &novoInimigo->animacaoInicio; quantidadeAnimacoes++;
     novoInimigo->quantidadeAnimacoes = quantidadeAnimacoes;
 
     return novoInimigo;
@@ -108,6 +135,37 @@ void atualizarInimigoBoss( InimigoBoss *inimigo, GameWorld *gw, float delta ) {
 
     if ( inimigo->ativo ) {
 
+        if  ( inimigo->estado == ESTADO_INIMIGO_BOSS_INICIO ){
+
+            float distanciaDoJogador = inimigo->ret.x - gw->jogador->ret.x;
+            if ( distanciaDoJogador <= -430 ){
+                bossCutscene = true;
+            }
+
+            if ( bossCutscene ){
+                emCutscene = true;
+                tempoCutscene += delta;
+
+                if ( tempoCutscene >= 6){
+                    emCutscene = false;
+                    bossCutscene = false;
+                    inimigo->estado = ESTADO_INIMIGO_BOSS_ANDANDO;
+                    tempoCutscene = 0;
+                } else if (tempoCutscene >= 5) {
+                    inimigo->ret.x = inimigo->ret.x;
+                }else if (tempoCutscene >= 2.5){
+                    inimigo->tempoOnda += delta;
+                    inimigo->ret.y = inimigo->posYInicial + sinf(inimigo->tempoOnda * 10) * 30;
+                } else if (tempoCutscene >= 2){
+                    inimigo->ret.x = inimigo->ret.x;
+                } else{
+                    inimigo->ret.x += 100 * delta;
+                }
+                
+            }
+
+        }
+
         if ( inimigo->estado == ESTADO_INIMIGO_BOSS_ANDANDO ) {
 
             Animacao *animacaoAtual = getAnimacaoAtualInimigoBoss( inimigo );
@@ -119,20 +177,34 @@ void atualizarInimigoBoss( InimigoBoss *inimigo, GameWorld *gw, float delta ) {
             };
 
             if ( inimigo->olhandoParaDireita ) {
-                inimigo->vel.x = inimigo->velAndando;
-            } else {
                 inimigo->vel.x = -inimigo->velAndando;
+            } else {
+                inimigo->vel.x = inimigo->velAndando;
             }
 
             // fase X
-            inimigo->ret.x += inimigo->vel.x * delta;
+            float distanciaDoJogador = inimigo->ret.x - gw->jogador->ret.x;
+
+            printf("%f\n", distanciaDoJogador);
+
+            if (distanciaDoJogador <= -350){
+                inimigo->ret.x += 500 * delta;
+            } else if (distanciaDoJogador <= -250) {
+                inimigo->ret.x += 400 * delta;
+            } else if (distanciaDoJogador <= -150) {
+                inimigo->ret.x += 300 * delta;
+            } else if (distanciaDoJogador <= -50) {
+                inimigo->ret.x += 250 * delta;
+            } else{
+                inimigo->ret.x += 200 * delta;
+            }
+            
             resolverColisaoInimigoObstaculosMapaX( &ini, gw->mapa );
             resolverColisaoInimigoBlocoInvisivelMapaX( &ini, gw->mapa );
 
-            inimigo->vel.y += 0;
-
             // fase Y
-            inimigo->ret.y += inimigo->vel.y * delta;
+            inimigo->tempoOnda += delta;
+            inimigo->ret.y = inimigo->posYInicial + sinf(inimigo->tempoOnda * 4) * 30;
             resolverColisaoInimigoObstaculosMapaY( &ini, gw->mapa );
             resolverColisaoInimigoBlocoInvisivelMapaY( &ini, gw->mapa );
 

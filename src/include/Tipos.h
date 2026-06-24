@@ -62,9 +62,9 @@ typedef enum EstadoInimigoAdware {
  * @brief Representa o estado do inimigo do tipo Boss.
  */
 typedef enum EstadoInimigoBoss {
-    ESTADO_INIMIGO_BOSS_INICIO,
     ESTADO_INIMIGO_BOSS_ANDANDO,
     ESTADO_INIMIGO_BOSS_MORRENDO,
+    ESTADO_INIMIGO_BOSS_INICIO,
 } EstadoInimigoBoss;
 
 /**
@@ -343,16 +343,19 @@ typedef struct InimigoBoss {
     Vector2 vel;
     Color cor;
 
+    float posYInicial;
+    float tempoOnda;
+
     float velAndando;
-    float velMaxQueda;
 
     EstadoInimigoBoss estado;
     bool ativo;
     bool olhandoParaDireita;
 
-    Animacao *animacoes[2];
+    Animacao *animacoes[3];
     int quantidadeAnimacoes;
 
+    Animacao animacaoInicio;
     Animacao animacaoAndando;
     Animacao animacaoMorrendo;
 
