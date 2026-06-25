@@ -120,7 +120,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
         cronometro += delta;
 
         if (cronometro >= 0.1 ){
-            estadoJogoAnterior = ESTADO_JOGO_MAPA1;
+            estadoJogoAnterior = ESTADO_JOGO_DERROTA;
             alterarEstadoJogo(ESTADO_JOGO_TRANSICAO);
             cronometro = 0;
             botaoIniciar = BOTAO_PARADO;
