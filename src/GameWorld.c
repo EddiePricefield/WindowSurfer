@@ -74,6 +74,9 @@ bool exibirGuia = false;
 bool exibirOpcoes = false;
 bool telaCheia = false;
 bool debug = false;
+bool tocarMusicaBoss = false;
+
+int tempBits = 0;
 
 float fade = 0;
 float tempoFade = 0.5;
@@ -339,6 +342,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             } else if (botaoMusica == BOTAO_SELECIONADO){
 
                 SetMusicVolume( rm.musicaFase01, 0.75f * volMusica / 10.0f );
+                SetMusicVolume( rm.musicaFase02, 0.75f * volMusica / 10.0f );
 
                 if ( IsKeyPressed( KEY_RIGHT ) || IsKeyPressed( KEY_D )  ) { 
 
@@ -494,6 +498,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             }
             break;
         case ESTADO_JOGO_VITORIA:
+            SetMusicVolume(rm.musicaFase02, 0);
             gw->camera.target.x += 300 * delta;
 
             int maxX = calcularLarguraMapa( gw->mapa ) - LARGURA_VIRTUAL / 2;
@@ -508,11 +513,15 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             } else{
                 fade = 0;
             }
-
+            
             if ( !IsMusicStreamPlaying( rm.musicaFase01 ) ) {
                 PlayMusicStream( rm.musicaFase01 );
             } else {
                 UpdateMusicStream( rm.musicaFase01 );
+            }
+
+            if ( tocarMusicaBoss ){
+                UpdateMusicStream( rm.musicaFase02 );
             }
 
             if ( IsKeyPressed( KEY_R ) || mudarFase ) {
@@ -537,6 +546,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             atualizarJogador( j, gw, delta );
             atualizarCamera( gw );
             verificarJogadorMorto( gw );
+            
             break;
     }
 
@@ -618,6 +628,8 @@ void drawGameWorld( GameWorld *gw ) {
 
                     if ( IsMusicStreamPlaying( rm.musicaFase01 ) ) {
                         PauseMusicStream( rm.musicaFase01 );
+                    } else if ( IsMusicStreamPlaying( rm.musicaFase02 ) ) {
+                        PauseMusicStream( rm.musicaFase02 );
                     }
 
                     DrawRectangle(0, 0, 800, 450, (Color) { 0, 0, 0, 175 });
@@ -1043,11 +1055,22 @@ static void inicializar( GameWorld *gw ) {
             break;
         case ESTADO_JOGO_MAPA1:
             gw->mapa = carregarMapa( "resources/mapas/mapa01.txt" );
-            gw->jogador = criarJogador( 50 + 144, 144, 96, 96 );
+            gw->jogador = criarJogador( 50, 450, 96, 96 );
+
+            if (tempBits > 0){
+                gw->jogador->quantidadeBits = tempBits;
+            }
+
             break;
         case ESTADO_JOGO_MAPA2:
             gw->mapa = carregarMapa( "resources/mapas/mapa02.txt" );
-            gw->jogador = criarJogador( GetScreenWidth() / 2 + 144, calcularAlturaMapa( gw->mapa ) - 1000, 96, 96 );
+            gw->jogador = criarJogador( 194, 144, 96, 96 );
+            SetMusicVolume( rm.musicaFase01, 0 );
+
+            if (tempBits > 0){
+                gw->jogador->quantidadeBits = tempBits;
+            }
+
             break;
         case ESTADO_JOGO_MAPA3:
             gw->mapa = carregarMapa( "resources/mapas/mapa03.txt" );
@@ -1092,6 +1115,10 @@ static void reiniciar( GameWorld *gw ) {
         StopMusicStream( rm.musicaFase01 );
     }
 
+    if ( IsMusicStreamPlaying( rm.musicaFase02 ) ) {
+        StopMusicStream( rm.musicaFase02 );
+    }
+
     inicializar( gw );
 
 }
@@ -1103,6 +1130,7 @@ void alterarEstadoJogo(EstadoJogo novoEstado ){
 
 static void verificarJogadorMorto( GameWorld *gw ) {
     if(gw->jogador->morreu) {
+        tocarMusicaBoss = false;
         if(gw->jogador->quantidadeVidas > 0){
             gw->jogador->quantidadeVidas--;
             int vidaPosMorte = gw->jogador->quantidadeVidas;

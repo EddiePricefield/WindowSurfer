@@ -120,6 +120,14 @@ typedef enum EstadoItemDefender {
 } EstadoItemDefender;
 
 /**
+ * @brief Representa o estado do item do tipo system32.
+ */
+typedef enum EstadoItemSystem32 {
+    ESTADO_ITEM_SYSTEM32_PARADO,
+    ESTADO_ITEM_SYSTEM32_COLETADO,
+} EstadoItemSystem32;
+
+/**
  * @brief Representa o tipo de um item.
  */
 typedef enum TipoItem {
@@ -127,6 +135,7 @@ typedef enum TipoItem {
     TIPO_ITEM_BYTE,
     TIPO_ITEM_ATALHO,
     TIPO_ITEM_DEFENDER,
+    TIPO_ITEM_SYSTEM32
 } TipoItem;
 
 /**
@@ -481,6 +490,25 @@ typedef struct ItemDefender {
     Animacao animacaoColetando;
 
 } ItemDefender;
+
+/**
+ * @brief Representa um item do tipo system32.
+ */
+typedef struct ItemSystem32 {
+
+    Rectangle ret;
+    Color cor;
+
+    EstadoItemDefender estado;
+    bool ativo;
+
+    Animacao *animacoes[2];
+    int quantidadeAnimacoes;
+
+    Animacao animacaoParado;
+    Animacao animacaoColetando;
+
+} ItemSystem32;
 
 /**
  * @brief Representa um item estático do mapa.

@@ -41,6 +41,7 @@ static void resolverColisaoJogadorObstaculosMapaY( Jogador *j, Mapa *mapa );
 static void resolverColisaoJogadorItensMapa( Jogador *j, Mapa *mapa );
 static void resolverColisaoJogadorInimigosMapa( Jogador *j, Mapa *mapa );
 
+extern int tempBits;
 extern bool debug;
 bool emCutscene = false;
 
@@ -422,7 +423,7 @@ void atualizarJogador( Jogador *j, GameWorld *gw, float delta ) {
     if(!j->noChao && j->contadorCoyoteTime >= j->coyoteTime && j->quantidadePulos == 0) {
         j->quantidadeMaxPulos = 0;
     } else {
-        j->quantidadeMaxPulos = 2;
+        j->quantidadeMaxPulos = 99;
     }
     
     if(j->ret.y > calcularAlturaMapa(gw->mapa)) {
@@ -666,6 +667,7 @@ static void resolverColisaoJogadorItensMapa( Jogador *j, Mapa *mapa ) {
 
             if ( CheckCollisionRecs( retColCalculado, retColItemCalculado ) ) {
                 itemAtalho->estado = ESTADO_ITEM_ATALHO_COLETADO;
+                tempBits = j->quantidadeBits;
                 PlaySound( rm.somColeta );
             }
 

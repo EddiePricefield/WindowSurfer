@@ -24,6 +24,7 @@
 #include "ItemByte.h"
 #include "ItemAtalho.h"
 #include "ItemDefender.h"
+#include "ItemSystem32.h"
 #include "Obstaculo.h"
 #include "BlocoInvisivel.h"
 #include "Tipos.h"
@@ -227,6 +228,23 @@ Mapa *carregarMapa(const char *caminhoArquivo)
                                 .y = novoMapa->dimensaoPadraoElementos * linhaAtual - 12,
                                 .width = 40,
                                 .height = 46},
+                            YELLOW);
+
+                        el->objeto = item;
+                        el->tipo = TIPO_ELEMENTO_MAPA_ITEM;
+
+                        break;
+
+                    case 'e':
+
+                        item = criarItem(TIPO_ITEM_SYSTEM32);
+
+                        item->objeto = criarItemSystem32(
+                            (Rectangle){
+                                .x = novoMapa->dimensaoPadraoElementos * colunaAtual + 8,
+                                .y = novoMapa->dimensaoPadraoElementos * linhaAtual + 20,
+                                .width = 450,
+                                .height = 372},
                             YELLOW);
 
                         el->objeto = item;

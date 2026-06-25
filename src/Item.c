@@ -15,6 +15,7 @@
 #include "ItemByte.h"
 #include "ItemAtalho.h"
 #include "ItemDefender.h"
+#include "ItemSystem32.h"
 #include "Tipos.h"
 
 /**
@@ -48,6 +49,9 @@ void destruirItem( Item *item ) {
             case TIPO_ITEM_DEFENDER:
                 destruirItemDefender( (ItemDefender*) item->objeto );
                 break;
+            case TIPO_ITEM_SYSTEM32:
+                destruirItemSystem32( (ItemSystem32*) item->objeto );
+                break;
             default:
                 break;
         }
@@ -73,6 +77,9 @@ void atualizarItem( Item *item, float delta ) {
         case TIPO_ITEM_DEFENDER:
             atualizarItemDefender( (ItemDefender*) item->objeto, delta );
             break;
+        case TIPO_ITEM_SYSTEM32:
+            atualizarItemSystem32( (ItemSystem32*) item->objeto, delta );
+            break;
         default:
             return;
     }
@@ -96,6 +103,9 @@ void desenharItem( Item *item ) {
             break;
         case TIPO_ITEM_DEFENDER:
             desenharItemDefender( (ItemDefender*) item->objeto );
+            break;
+        case TIPO_ITEM_SYSTEM32:
+            desenharItemSystem32( (ItemSystem32*) item->objeto );
             break;
         default:
             return;

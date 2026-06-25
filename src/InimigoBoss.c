@@ -27,6 +27,7 @@ bool bossCutscene;
 
 extern bool debug;
 extern bool emCutscene;
+extern bool tocarMusicaBoss;
 
 /**
  * @brief Cria um novo Inimigo (boss).
@@ -180,6 +181,8 @@ void atualizarInimigoBoss( InimigoBoss *inimigo, GameWorld *gw, float delta ) {
                     bossCutscene = false;
                     inimigo->estado = ESTADO_INIMIGO_BOSS_ANDANDO;
                     tempoCutscene = 0;
+                    tocarMusicaBoss = true;
+                    PlayMusicStream( rm.musicaFase02 );
                 } else if (tempoCutscene >= 4.7) {
                     atualizarAnimacao( &inimigo->animacaoInicio, delta );
                     inimigo->ret.x = inimigo->ret.x;
@@ -188,6 +191,7 @@ void atualizarInimigoBoss( InimigoBoss *inimigo, GameWorld *gw, float delta ) {
                     inimigo->tempoOnda += delta;
                     inimigo->ret.y = inimigo->posYInicial + sinf(inimigo->tempoOnda * 25) * 20;
                 } else if (tempoCutscene >= 2.2){
+                    PlaySound(rm.somBossRisada);
                     inimigo->ret.x = inimigo->ret.x;
                 } else{
                     inimigo->ret.x += 100 * delta;
@@ -215,7 +219,6 @@ void atualizarInimigoBoss( InimigoBoss *inimigo, GameWorld *gw, float delta ) {
             // fase X
             float distanciaDoJogadorX = inimigo->ret.x - gw->jogador->ret.x;
 
-            printf("%f\n", distanciaDoJogadorX);
 
             if (distanciaDoJogadorX <= -670){
                 inimigo->ret.x += 550 * delta;
@@ -241,7 +244,6 @@ void atualizarInimigoBoss( InimigoBoss *inimigo, GameWorld *gw, float delta ) {
                 inimigo->posYInicial -= 300 * delta;
             }
 
-            printf("%f\n", distanciaDoJogadorY);
 
             inimigo->tempoOnda += delta;
             inimigo->ret.y = inimigo->posYInicial + sinf(inimigo->tempoOnda * 4) * 30;

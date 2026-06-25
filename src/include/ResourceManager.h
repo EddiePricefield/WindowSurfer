@@ -34,6 +34,7 @@ typedef struct ResourceManager {
     Texture2D texturaMenuPausa;
     Texture2D texturaMenuGuia;
     Texture2D texturaMenuOpcoes;
+    Texture2D texturaSystem32;
 
     Texture2D texturaTelaMorte;
 
@@ -45,11 +46,13 @@ typedef struct ResourceManager {
     Sound somPulo;
     Sound somClick;
     Sound somGameOver;
+    Sound somBossRisada;
 
     Sound somAbrirMenu;
     Sound somFecharMenu;
 
     Music musicaFase01;
+    Music musicaFase02;
 
 } ResourceManager;
 

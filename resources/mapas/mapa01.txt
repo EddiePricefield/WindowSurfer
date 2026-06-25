@@ -1,18 +1,24 @@
-                    
-                    #2               #    #2         #                      3             3         #2   #          3                                                          3
-5                                     0            0             #      2#                               #2      #                                                             #   2       #
-                     aa             #aaaaaaaaaaaaaaaa#    d           #         2       1    #d aaaaa 
-DEEEEEEEEEEEEEEEEF  bDFaa  #aaaa#    DEEEEEEEEEEEEEEF    DEFb                          #aaaa#   DEEEFaaa   0 0 0                                #2                  #      0   1    0    1    0
-JKKKKKKKKKKKKKKKKL  DOPEF   DEEF     GHHHHHHHHHHHHHHI    JMEF    1     0 0 0        1   DEEF    GHMEEEEF #aaaaaaa#                                                   da #aaaaaaaaaaaaaaaaaaaaaaaaaa#    4
-                    JKKKL   GHHI     JKKKKKKKKKKKKKKL     JKL   #aaaaaaaaaaaaaaaaaaaa#  JKKL    JKGHHHHI  DEEEEEF      #2          #                                aDF  DEEEEEEEEEEEEEEEEEEEEEEEEF   DEEEF
-                            JKKL                                 DEEEEEEEEEEEEEEEEEEF         3   JKKKKL  JKKKKKL   d                    #2             #   3      aDOL  JKKKKKKKKKKKKKKKKKKKKKKKKL   JKKKL
-                                                           3     JKKKKKKKKKKKKKKKKKKL                              DEF                                            aDOL
-                                  d                                                                                JKL    1    1    1       ada                  aDOL
-                                 DEF                                                                                  #aaaaaaaaaaaaaaaa#    DEF    0      0      DOL
-                                 JKL                                                                    3              DEEEEEEEEEEEEEEF     JKL #aaaaaaaaaaaaa#  JL
-                                                                                                                       JKKKKKKKKKKKKKKL  3       DEEEEEEEEEEEF
-                                                                                                                                                 JKKKKKKKKKKKL
-
+                                                                      DEF
+                                                                      GHI
+                                                                      GHI                                           c
+                                                                      GHI                          bb            aaDEEFaa
+                                                                      GHI                         a  a           DEOKKPEF  
+                                                           1          JKL                     ada      DEEF   2  JKKKKKKL
+                                                    3    #aaa#                                DEF      JKKL
+                                                        0 DEF   DEF a DEF                     GHI  b
+                                            0 0       #aaaGHI   GHI a GHI                     JKL  3
+                         #1b #             #aaaa#      DEEGHIF  GHI a GHI                            aba
+ a a a                    DEF              aDEEF       JKKGHIL  GHI a GHI                          b DEF
+DEEEEEEFa                 GHI            aDEGHHI          JKL   GHI a GHI                            GHI
+GMEEEEEEFa                GHI           DEGHOKKL                GHI a GHI      b                     JKL
+JGMEEEEEEFa               GHIaaaaaa     GHOKKL                  JKL a JKL    a   a    3       ada        
+ JGMEEEEEEF    2   DEEEEEEOKPEEEEEF     JKKL                                                  DEF                   
+  JGHHHHHHI        JKKKKKKKKKKKKKKL                              DF a0a a0a #    # 1 1DF      GHI     
+   JKKKKKKL                                                     DGIEEEEEEEEF      DEEEGIF     JKL 
+                                                                GOPHHHHHHHHI      GHHHOPI
+                                                                JKKKKKKKKMNL      JKKKKKL
+                                                                         GI
+                                                                         JL
 
 
 

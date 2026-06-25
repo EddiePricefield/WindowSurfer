@@ -153,6 +153,17 @@ void loadResourcesResourceManager( void ) {
         1
     );
 
+    rm.texturaSystem32 = carregarTexturaAlterandoCores(
+        "resources/imagens/artes/system32.png",
+        (Color[]) {
+            { 62, 62, 130, 255 },
+        },
+        (Color[]) {
+            BLANK,
+        },
+        1
+    );
+
     rm.texturaTerreno = LoadTexture( "resources/imagens/tiles/terreno.png" );
     rm.texturaCeu = LoadTexture( "resources/imagens/fundo/ceu.png" );
 
@@ -183,6 +194,7 @@ void loadResourcesResourceManager( void ) {
     SetTextureFilter( rm.texturaMenuGuia, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaMenuOpcoes, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaTelaMorte, TEXTURE_FILTER_POINT );
+    SetTextureFilter( rm.texturaSystem32, TEXTURE_FILTER_POINT );
 
     rm.somColeta = LoadSound( "resources/sons/efeitos/bit.wav" );
     rm.somFrenagem = LoadSound( "resources/sons/efeitos/frenagem.wav" );
@@ -194,8 +206,10 @@ void loadResourcesResourceManager( void ) {
     rm.somGameOver = LoadSound( "resources/sons/efeitos/gameover.mp3" );
     rm.somAbrirMenu = LoadSound( "resources/sons/efeitos/abrir-menu.wav" );
     rm.somFecharMenu = LoadSound( "resources/sons/efeitos/fechar-menu.wav" );
+    rm.somBossRisada = LoadSound( "resources/sons/efeitos/MUAHAHA.mp3" );
 
     rm.musicaFase01 = LoadMusicStream( "resources/sons/musicas/piano2.mp3" );
+    rm.musicaFase02 = LoadMusicStream( "resources/sons/musicas/boss.mp3" );
 
     SetSoundVolume( rm.somColeta, 0.8f );
     SetSoundVolume( rm.somFrenagem, 0.0f );
@@ -208,7 +222,7 @@ void loadResourcesResourceManager( void ) {
     SetSoundVolume( rm.somFecharMenu, 1.5f );
     
     SetMusicVolume( rm.musicaFase01, 0.75f );
-
+    SetMusicVolume( rm.musicaFase02, 0.75f );
 
     SetMasterVolume( 1.0f);
 
@@ -235,6 +249,7 @@ void unloadResourcesResourceManager( void ) {
     UnloadTexture( rm.texturaMenuGuia );
     UnloadTexture( rm.texturaMenuOpcoes );
     UnloadTexture( rm.texturaTelaMorte );
+    UnloadTexture( rm.texturaSystem32 );
     UnloadSound( rm.somColeta );
     UnloadSound( rm.somFrenagem );
     UnloadSound( rm.somHit );
