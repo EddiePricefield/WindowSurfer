@@ -423,7 +423,7 @@ void atualizarJogador( Jogador *j, GameWorld *gw, float delta ) {
     if(!j->noChao && j->contadorCoyoteTime >= j->coyoteTime && j->quantidadePulos == 0) {
         j->quantidadeMaxPulos = 0;
     } else {
-        j->quantidadeMaxPulos = 99;
+        j->quantidadeMaxPulos = 2;
     }
     
     if(j->ret.y > calcularAlturaMapa(gw->mapa)) {

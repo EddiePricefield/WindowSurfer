@@ -17,9 +17,14 @@ ResourceManager rm = { 0 };
 
 void loadResourcesResourceManager( void ) {
 
+    rm.frameDelay = 5;
+
     rm.texturaJogador = LoadTexture( "resources/imagens/sprites/run/thickRunSheet.png" );
 
     rm.texturaJogadorParado = LoadTexture( "resources/imagens/sprites/idle/thickIdleSheet.png" );
+
+    rm.imagemCutsceneVitoria = LoadImageAnim("resources/imagens/artes/explosion.gif", &rm.animFrames);
+    rm.texturaCutsceneVitoria = LoadTextureFromImage(rm.imagemCutsceneVitoria);
 
     rm.texturaInimigos = carregarTexturaAlterandoCores( 
         "resources/imagens/sprites/spritesheet-virus.png",
@@ -207,6 +212,7 @@ void loadResourcesResourceManager( void ) {
     rm.somAbrirMenu = LoadSound( "resources/sons/efeitos/abrir-menu.wav" );
     rm.somFecharMenu = LoadSound( "resources/sons/efeitos/fechar-menu.wav" );
     rm.somBossRisada = LoadSound( "resources/sons/efeitos/MUAHAHA.mp3" );
+    rm.somVitoria = LoadSound( "resources/sons/efeitos/final.mp3" );
 
     rm.musicaFase01 = LoadMusicStream( "resources/sons/musicas/piano2.mp3" );
     rm.musicaFase02 = LoadMusicStream( "resources/sons/musicas/boss.mp3" );
@@ -220,6 +226,7 @@ void loadResourcesResourceManager( void ) {
     SetSoundVolume( rm.somGameOver, 0.9f );
     SetSoundVolume( rm.somAbrirMenu, 0.9f );
     SetSoundVolume( rm.somFecharMenu, 1.5f );
+    SetSoundVolume( rm.somVitoria, 1.5f );
     
     SetMusicVolume( rm.musicaFase01, 0.75f );
     SetMusicVolume( rm.musicaFase02, 0.75f );
@@ -260,7 +267,10 @@ void unloadResourcesResourceManager( void ) {
     UnloadSound( rm.somClick );
     UnloadSound( rm.somAbrirMenu );
     UnloadSound( rm.somFecharMenu );
+    UnloadSound( rm.somBossRisada );
+    UnloadSound( rm.somVitoria );
 
     UnloadMusicStream( rm.musicaFase01 );
+    UnloadMusicStream( rm.musicaFase02 );
 
 }

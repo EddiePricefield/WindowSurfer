@@ -11,6 +11,13 @@
 
 typedef struct ResourceManager {
 
+    Image imagemCutsceneVitoria;
+    Texture2D texturaCutsceneVitoria;
+    int animFrames;
+    int frameAtual;
+    int frameDelay;
+    int frameCounter;
+
     Texture2D texturaJanela1;
     Texture2D texturaJanela;
     
@@ -47,6 +54,7 @@ typedef struct ResourceManager {
     Sound somClick;
     Sound somGameOver;
     Sound somBossRisada;
+    Sound somVitoria;
 
     Sound somAbrirMenu;
     Sound somFecharMenu;

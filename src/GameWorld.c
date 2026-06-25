@@ -75,6 +75,7 @@ bool exibirOpcoes = false;
 bool telaCheia = false;
 bool debug = false;
 bool tocarMusicaBoss = false;
+bool iniciarCutsceneVitoria = false;
 
 int tempBits = 0;
 
@@ -119,7 +120,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
         cronometro += delta;
 
         if (cronometro >= 0.1 ){
-            estadoJogoAnterior = ESTADO_JOGO_DERROTA;
+            estadoJogoAnterior = ESTADO_JOGO_MAPA1;
             alterarEstadoJogo(ESTADO_JOGO_TRANSICAO);
             cronometro = 0;
             botaoIniciar = BOTAO_PARADO;
@@ -382,6 +383,7 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                 SetSoundVolume( rm.somAbrirMenu, 0.7f * volSons / 10.0f );
                 SetSoundVolume( rm.somFecharMenu, 1.0f * volSons / 10.0f );
                 SetSoundVolume( rm.somMorte, 1.0f * volSons / 10.0f );
+                SetSoundVolume( rm.somBossRisada, 1.0f * volSons / 10.0f );
 
                 if ( IsKeyPressed( KEY_RIGHT ) || IsKeyPressed( KEY_D )  ) { 
 
@@ -499,12 +501,39 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             break;
         case ESTADO_JOGO_VITORIA:
             SetMusicVolume(rm.musicaFase02, 0);
-            gw->camera.target.x += 300 * delta;
 
             int maxX = calcularLarguraMapa( gw->mapa ) - LARGURA_VIRTUAL / 2;
-            if ( gw->camera.target.x > maxX ) {
-                gw->camera.target.x = maxX;
+            
+            if ( gw->camera.target.x < maxX ) {
+                gw->camera.target.x += 300 * delta;
+                
+
+                if ( gw->camera.target.x >= maxX ) {
+                    gw->camera.target.x = maxX;
+                    iniciarCutsceneVitoria = true;
+                    PlaySound(rm.somVitoria);
+                }
+            } 
+            
+            if ( iniciarCutsceneVitoria ) {
+                
+                rm.frameCounter++;
+                if (rm.frameCounter >= rm.frameDelay) {
+                    rm.frameAtual++; 
+                    
+                    if (rm.frameAtual >= rm.animFrames) {
+                        CloseWindow();
+                        return; 
+                    }
+                    
+                    unsigned int nextFrameDataOffset = rm.imagemCutsceneVitoria.width * rm.imagemCutsceneVitoria.height * 4 * rm.frameAtual;
+                    
+                    UpdateTexture(rm.texturaCutsceneVitoria, ((unsigned char *)rm.imagemCutsceneVitoria.data) + nextFrameDataOffset);
+                    
+                    rm.frameCounter = 0;
+                }
             }
+
             break;
         default:
             
@@ -521,7 +550,11 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             }
 
             if ( tocarMusicaBoss ){
-                UpdateMusicStream( rm.musicaFase02 );
+                if ( !IsMusicStreamPlaying( rm.musicaFase02 ) ) {
+                    PlayMusicStream( rm.musicaFase02 );
+                } else {
+                    UpdateMusicStream( rm.musicaFase02 );
+                }
             }
 
             if ( IsKeyPressed( KEY_R ) || mudarFase ) {
@@ -548,12 +581,6 @@ void updateGameWorld( GameWorld *gw, float delta ) {
             verificarJogadorMorto( gw );
             
             break;
-    }
-
-    if(IsKeyPressed(KEY_M)){
-        SetMusicVolume(rm.musicaFase01, 0.0f);
-    } else if(IsKeyPressed(KEY_N)){
-        SetMusicVolume(rm.musicaFase01, 0.75f * volMusica / 10.0f );
     }
 
 }
@@ -609,8 +636,16 @@ void drawGameWorld( GameWorld *gw ) {
                 desenharMapa( gw->mapa );
                 desenharJogador( gw->jogador );
                 EndMode2D();
-
                 desenharHud( gw );
+
+                if (estadoJogoAtual == ESTADO_JOGO_VITORIA && iniciarCutsceneVitoria) {
+                    
+                    int posX = (LARGURA_VIRTUAL / 2) - (rm.texturaCutsceneVitoria.width / 2);
+                    int posY = (ALTURA_VIRTUAL / 2) - (rm.texturaCutsceneVitoria.height / 2);
+                    
+                    DrawTexture( rm.texturaCutsceneVitoria, posX, posY, WHITE );
+
+                }
 
                 // DrawText( TextFormat( "Anéis: %d", gw->jogador->quantidadeBits ), 10, 10, 20, ORANGE );
                 // DrawText( TextFormat( "Vidas: %d", gw->jogador->quantidadeVidas ), 10, 30, 20, ORANGE );
@@ -622,7 +657,6 @@ void drawGameWorld( GameWorld *gw ) {
                 //     ), 
                 //     10, 50, 20, ORANGE
                 // );
-                DrawFPS( 10, 120 );
 
                 if (estadoJogoAtual == ESTADO_JOGO_MENU_PAUSA){
 
@@ -832,19 +866,19 @@ static void desenharHud( GameWorld *gw ) {
     Rectangle popUpAviso = { 376, 48, 144, 96 };
     Rectangle popUpTelaAzul = { 521, 27, 207, 117 };
 
-    if (hp <= 2){
+    if (hp <= 2 && estadoJogoAtual != ESTADO_JOGO_VITORIA){
         DesenharPopup( rm.texturaPopUp, popUpCaveira, (Vector2){ -10, 360 }, WHITE );
         DesenharPopup( rm.texturaPopUp, popUpAviso, (Vector2){ 700, 10 }, WHITE );
     }
 
-    if (hp <= 1){
+    if (hp <= 1 && estadoJogoAtual != ESTADO_JOGO_VITORIA){
         DesenharPopup( rm.texturaPopUp, popUpAviso, (Vector2){ 30, 300 }, WHITE );
         DesenharPopup( rm.texturaPopUp, popUpCaveira, (Vector2){ 620, 70 }, WHITE );
         DesenharPopup( rm.texturaPopUp, popUpVisitante, (Vector2){ 600, 320 }, WHITE );
         DesenharPopup( rm.texturaPopUp, popUpTelaAzul, (Vector2){ -100, 20 }, WHITE );
     }
 
-    if (hp <= 0){
+    if (hp <= 0 && estadoJogoAtual != ESTADO_JOGO_VITORIA){
         DesenharPopup( rm.texturaPopUp, popUpTelaAzul, (Vector2){ 750, 370 }, WHITE );
         DesenharPopup( rm.texturaPopUp, popUpVisitante, (Vector2){ 600, 320 }, WHITE );
         DesenharPopup( rm.texturaPopUp, popUpAviso, (Vector2){ 700, 280 }, WHITE );
