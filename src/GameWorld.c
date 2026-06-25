@@ -493,6 +493,14 @@ void updateGameWorld( GameWorld *gw, float delta ) {
                 alterarEstadoJogo(++estadoJogoAnterior);
             }
             break;
+        case ESTADO_JOGO_VITORIA:
+            gw->camera.target.x += 300 * delta;
+
+            int maxX = calcularLarguraMapa( gw->mapa ) - LARGURA_VIRTUAL / 2;
+            if ( gw->camera.target.x > maxX ) {
+                gw->camera.target.x = maxX;
+            }
+            break;
         default:
             
             if (fade > 0){
@@ -1034,7 +1042,7 @@ static void inicializar( GameWorld *gw ) {
             return;
             break;
         case ESTADO_JOGO_MAPA1:
-            gw->mapa = carregarMapa( "resources/mapas/mapa03.txt" );
+            gw->mapa = carregarMapa( "resources/mapas/mapa01.txt" );
             gw->jogador = criarJogador( 50 + 144, 144, 96, 96 );
             break;
         case ESTADO_JOGO_MAPA2:
@@ -1052,7 +1060,7 @@ static void inicializar( GameWorld *gw ) {
         .offset = { 0 },    // deslocamento relativo da câmera em relação ao alvo
         .target = { 0 },    // o alvo da câmera, ou seja, a coordenada em que ela está centralizada
         .rotation = 0.0f,   // rotação da câmera em graus. o pivô é o alvo.
-        .zoom = 1.0f        // zoom da câmera. 1.0f significa sem escala
+        .zoom = 0.90f        // zoom da câmera. 1.0f significa sem escala
     };
 
     gw->gravidade = 1200;

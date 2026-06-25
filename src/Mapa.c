@@ -18,6 +18,7 @@
 #include "InimigoAdware.h"
 #include "InimigoPonteiro.h"
 #include "InimigoBoss.h"
+#include "InimigoBotao.h"
 #include "Item.h"
 #include "ItemBit.h"
 #include "ItemByte.h"
@@ -319,14 +320,31 @@ Mapa *carregarMapa(const char *caminhoArquivo)
                     
                     case '4':
 
+                        inimigo = criarInimigo(TIPO_INIMIGO_BOTAO);
+
+                        inimigo->objeto = criarInimigoBotao(
+                            (Rectangle){
+                                .x = novoMapa->dimensaoPadraoElementos * colunaAtual,
+                                .y = novoMapa->dimensaoPadraoElementos * linhaAtual,
+                                .width = 64,
+                                .height = 56},
+                            YELLOW);
+
+                        el->objeto = inimigo;
+                        el->tipo = TIPO_ELEMENTO_MAPA_INIMIGO;
+
+                        break;
+                    
+                    case '5':
+
                         inimigo = criarInimigo(TIPO_INIMIGO_BOSS);
 
                         inimigo->objeto = criarInimigoBoss(
                             (Rectangle){
                                 .x = novoMapa->dimensaoPadraoElementos * colunaAtual,
-                                .y = novoMapa->dimensaoPadraoElementos * linhaAtual - 21,
-                                .width = 80,
-                                .height = 60},
+                                .y = novoMapa->dimensaoPadraoElementos * linhaAtual - 31,
+                                .width = 281,
+                                .height = 211},
                             YELLOW);
 
                         el->objeto = inimigo;

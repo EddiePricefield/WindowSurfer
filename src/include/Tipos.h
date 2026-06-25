@@ -68,6 +68,14 @@ typedef enum EstadoInimigoBoss {
 } EstadoInimigoBoss;
 
 /**
+ * @brief Representa o estado do inimigo do tipo Botao.
+ */
+typedef enum EstadoInimigoBotao {
+    ESTADO_INIMIGO_BOTAO_ANDANDO,
+    ESTADO_INIMIGO_BOTAO_MORRENDO,
+} EstadoInimigoBotao;
+
+/**
  * @brief Representa o tipo de um inimigo.
  */
 typedef enum TipoInimigo {
@@ -76,6 +84,7 @@ typedef enum TipoInimigo {
     TIPO_INIMIGO_ADWARE,
     TIPO_INIMIGO_PONTEIRO,
     TIPO_INIMIGO_BOSS,
+    TIPO_INIMIGO_BOTAO
 } TipoInimigo;
 
 /**
@@ -103,7 +112,7 @@ typedef enum EstadoItemAtalho {
 } EstadoItemAtalho;
 
 /**
- * @brief Representa o estado do item do tipo DEFENDER.
+ * @brief Representa o estado do item do tipo defender.
  */
 typedef enum EstadoItemDefender {
     ESTADO_ITEM_DEFENDER_PARADO,
@@ -138,6 +147,7 @@ typedef enum EstadoJogo {
     ESTADO_JOGO_MENU_PAUSA,
     ESTADO_JOGO_INICIO,
     ESTADO_JOGO_TRANSICAO,
+    ESTADO_JOGO_VITORIA,
     ESTADO_JOGO_DERROTA,
     ESTADO_JOGO_MAPA1,
     ESTADO_JOGO_MAPA2,
@@ -352,14 +362,39 @@ typedef struct InimigoBoss {
     bool ativo;
     bool olhandoParaDireita;
 
-    Animacao *animacoes[3];
+    Animacao *animacoes[4];
     int quantidadeAnimacoes;
 
     Animacao animacaoInicio;
+    Animacao animacaoBravo;
     Animacao animacaoAndando;
     Animacao animacaoMorrendo;
 
 } InimigoBoss;
+
+/**
+ * @brief Representa um inimigo do tipo Botao.
+ */
+typedef struct InimigoBotao {
+
+    Rectangle ret;
+    Vector2 vel;
+    Color cor;
+
+    float velAndando;
+    float velMaxQueda;
+
+    EstadoInimigoBotao estado;
+    bool ativo;
+    bool olhandoParaDireita;     
+
+    Animacao *animacoes[2];
+    int quantidadeAnimacoes;
+
+    Animacao animacaoAndando;
+    Animacao animacaoMorrendo;
+
+} InimigoBotao;
 
 
 /**

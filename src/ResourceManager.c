@@ -32,6 +32,17 @@ void loadResourcesResourceManager( void ) {
         1
     );
 
+    rm.texturaBoss = carregarTexturaAlterandoCores( 
+        "resources/imagens/sprites/boss.png",
+        (Color[]) {
+            { 64, 64, 127, 255 },
+        },
+        (Color[]) {
+            BLANK,
+        },
+        1
+    );
+
     rm.texturaMorte = carregarTexturaAlterandoCores( 
         "resources/imagens/sprites/badniks.png",
         (Color[]) {
@@ -156,6 +167,7 @@ void loadResourcesResourceManager( void ) {
     SetTextureFilter( rm.texturaJogador, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaJogadorParado, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaInimigos, TEXTURE_FILTER_POINT );
+    SetTextureFilter( rm.texturaBoss, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaItens, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaTerreno, TEXTURE_FILTER_POINT );
     SetTextureFilter( rm.texturaFundo, TEXTURE_FILTER_POINT );
@@ -207,6 +219,7 @@ void unloadResourcesResourceManager( void ) {
     UnloadTexture( rm.texturaJogador );
     UnloadTexture( rm.texturaJogadorParado );
     UnloadTexture( rm.texturaInimigos );
+    UnloadTexture( rm.texturaBoss );
     UnloadTexture( rm.texturaItens );
     UnloadTexture( rm.texturaTerreno );
     UnloadTexture( rm.texturaFundo );

@@ -16,6 +16,7 @@
 #include "InimigoAdware.h"
 #include "InimigoPonteiro.h"
 #include "InimigoBoss.h"
+#include "InimigoBotao.h"
 #include "Tipos.h"
 
 /**
@@ -52,6 +53,9 @@ void destruirInimigo( Inimigo *inimigo ) {
             case TIPO_INIMIGO_BOSS:
                 destruirInimigoBoss( (InimigoBoss*) inimigo->objeto );
                 break;
+            case TIPO_INIMIGO_BOTAO:
+                destruirInimigoBotao( (InimigoBotao*) inimigo->objeto );
+                break;
             default:
                 break;
         }
@@ -80,6 +84,9 @@ void atualizarInimigo( Inimigo *inimigo, GameWorld *gw, float delta ) {
         case TIPO_INIMIGO_BOSS:
             atualizarInimigoBoss( (InimigoBoss*) inimigo->objeto, gw, delta );
             break;
+        case TIPO_INIMIGO_BOTAO:
+            atualizarInimigoBotao( (InimigoBotao*) inimigo->objeto, gw, delta );
+            break;
         default:
             return;
     }
@@ -106,6 +113,9 @@ void desenharInimigo( Inimigo *inimigo ) {
             break;
         case TIPO_INIMIGO_BOSS:
             desenharInimigoBoss( (InimigoBoss*) inimigo->objeto );
+            break;
+        case TIPO_INIMIGO_BOTAO:
+            desenharInimigoBotao( (InimigoBotao*) inimigo->objeto );
             break;
         default:
             return;

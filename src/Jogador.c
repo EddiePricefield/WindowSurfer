@@ -18,6 +18,7 @@
 #include "InimigoAdware.h"
 #include "InimigoPonteiro.h"
 #include "InimigoBoss.h"
+#include "InimigoBotao.h"
 #include "Item.h"
 #include "ItemBit.h"
 #include "ItemByte.h"
@@ -945,14 +946,11 @@ static void resolverColisaoJogadorInimigosMapa( Jogador *j, Mapa *mapa ) {
 
             if ( CheckCollisionRecs( retColCalculado, retColInimigoCalculado ) ) {
 
-                if ( j->vel.y > 0 && ((retColCalculado.y + retColCalculado.height) <= (retColInimigoCalculado.y + retColInimigoCalculado.height * 0.75)) && j->estado >= ESTADO_JOGADOR_PULANDO && j->estado <= ESTADO_JOGADOR_PULANDO_CORRENDO ) {
-                    j->vel.y = j->velPulo;
-                    boss->estado = ESTADO_INIMIGO_BOSS_MORRENDO;
-                    j->scoreTotal += 100;
-                    PlaySound( rm.somHitInimigo );
-                } else if ( !j->invulneravel ) {
+                if ( !j->invulneravel ) {
                     if ( j->quantidadeHP > 0 ) {
-                        j->quantidadeHP--;
+                        j->quantidadeHP = 0;
+                        j->vel.y = -800;
+                        j->vel.x = 1500;
                         PlaySound( rm.somHit );
                         ativarCameraShake(DURACAO_SHAKE, INTENSIDADE_SHAKE);
                     } else {
@@ -965,6 +963,40 @@ static void resolverColisaoJogadorInimigosMapa( Jogador *j, Mapa *mapa ) {
                 return; // um inimigo de cada vez!
 
             }
+        } else if ( inimigo->tipo == TIPO_INIMIGO_BOTAO ) {
+
+            InimigoBotao *botao = (InimigoBotao*) inimigo->objeto;
+
+            if ( !botao->ativo || botao->estado == ESTADO_INIMIGO_BOTAO_MORRENDO ) {
+                el = el->proximo;
+                continue;
+            }
+
+            qaInimigo = getQuadroAnimacaoAtualInimigoBotao( botao );
+            olhandoParaDireita = &botao->olhandoParaDireita;
+            ret = &botao->ret;
+
+            float deslocamentoX = *olhandoParaDireita
+                ? ret->width - qaInimigo->retColisao.x - qaInimigo->retColisao.width
+                : qaInimigo->retColisao.x;
+            float deslocamentoY = qaInimigo->retColisao.y;
+
+            Rectangle retColInimigoCalculado = {
+                ret->x + deslocamentoX,
+                ret->y + deslocamentoY,
+                qaInimigo->retColisao.width,
+                qaInimigo->retColisao.height
+            };
+
+            if ( CheckCollisionRecs( retColCalculado, retColInimigoCalculado ) ) {
+
+                botao->estado = ESTADO_INIMIGO_BOTAO_MORRENDO;
+                PlaySound( rm.somClick );
+
+                return; // um inimigo de cada vez!
+
+            }
+
         }
 
         el = el->proximo;
